@@ -6,6 +6,7 @@ import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import type { ChildProcess } from 'node:child_process';
 import { createServer } from 'node:net';
+import { join } from 'node:path';
 
 type ElementHandle = { click(): Promise<void>; type(text: string, opts?: { delay?: number }): Promise<void> };
 type Page = {
@@ -21,7 +22,7 @@ type Page = {
   pdf(opts: { preferCSSPageSize?: boolean }): Promise<Uint8Array>;
   setViewport(v: { width: number; height: number }): Promise<void>;
 };
-type Browser = { newPage(): Promise<Page>; close(): Promise<void> };
+type Browser = { newPage(): Promise<Page>; close(): Promise<void>; process(): ChildProcess | null };
 type Puppeteer = { launch(opts: { executablePath?: string; headless?: boolean; args?: string[] }): Promise<Browser> };
 
 let browser: Browser, page: Page, serverProcess: ChildProcess, baseUrl: string;
@@ -49,16 +50,19 @@ before(async () => {
 
   const port = await freePort();
   baseUrl = `http://localhost:${port}`;
-  serverProcess = spawn('npx', ['webjs', 'dev', '--port', String(port)], {
+  // The binary itself in its own process group, so teardown can kill the whole
+  // tree. A survivor holding these pipes would keep the test process from exiting.
+  serverProcess = spawn(join(process.cwd(), 'node_modules/.bin/webjs'), ['dev', '--port', String(port)], {
     cwd: process.cwd(),
     env: { ...process.env, __WEBJS_DEV_CHILD: '1' },
     stdio: ['ignore', 'pipe', 'pipe'],
+    detached: true,
   });
   await new Promise<void>((resolve, reject) => {
     const onData = (chunk: Buffer) => { if (chunk.toString().includes('ready on')) resolve(); };
     serverProcess.stdout?.on('data', onData);
     serverProcess.stderr?.on('data', onData);
-    setTimeout(() => reject(new Error('Server start timeout')), 20000);
+    setTimeout(() => reject(new Error('Server start timeout')), 20000).unref();
   });
 
   browser = await puppeteer.launch({
@@ -68,14 +72,24 @@ before(async () => {
   });
   page = await browser.newPage();
   page.on('pageerror', (e: Error) => errors.push(e.message));
-});
+}, { timeout: 60000 });
 
 after(async () => {
-  if (browser) await browser.close();
-  if (serverProcess) serverProcess.kill('SIGTERM');
-});
+  if (browser) {
+    const closing = browser.process();
+    await Promise.race([browser.close(), new Promise((r) => setTimeout(r, 5000).unref())]);
+    closing?.kill('SIGKILL');
+  }
+  if (serverProcess?.pid) {
+    try { process.kill(-serverProcess.pid, 'SIGKILL'); } catch {}
+    serverProcess.stdout?.destroy();
+    serverProcess.stderr?.destroy();
+    serverProcess.unref();
+  }
+}, { timeout: 15000 });
 
-describe('E2E: resume flow', { skip: !process.env.WEBJS_E2E && 'set WEBJS_E2E=1 to run' }, () => {
+// A hard ceiling, so a stuck step fails with a message instead of hanging the job.
+describe('E2E: resume flow', { skip: !process.env.WEBJS_E2E && 'set WEBJS_E2E=1 to run', timeout: 180000 }, () => {
   let editorUrl = '';
 
   test('create a resume from the new page', async () => {
