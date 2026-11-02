@@ -1,6 +1,5 @@
 // The MPA pages through the real request pipeline: list, search, create
 // (303 on success, 422 with the field error on failure), templates, delete.
-process.env.FOLIO_AI = 'off';
 process.env.DATABASE_URL ||= 'file:./db/dev.db';
 
 import { test, before, after } from 'node:test';

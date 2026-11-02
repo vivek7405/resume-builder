@@ -49,7 +49,7 @@ before(async () => {
   baseUrl = `http://localhost:${port}`;
   serverProcess = spawn('npx', ['webjs', 'dev', '--port', String(port)], {
     cwd: process.cwd(),
-    env: { ...process.env, __WEBJS_DEV_CHILD: '1', FOLIO_AI: 'off' },
+    env: { ...process.env, __WEBJS_DEV_CHILD: '1' },
     stdio: ['ignore', 'pipe', 'pipe'],
   });
   await new Promise<void>((resolve, reject) => {

@@ -2,11 +2,10 @@
 //
 // No side-effect component imports here on purpose: a bare import in a
 // non-component module makes every page that reaches it ship whole. The
-// pages that render these fragments import fit-sheet and form-pending
+// pages that render these fragments import fit-sheet
 // themselves, which keeps them import-only.
 import { html } from '@webjsdev/core';
 import { buttonClass } from '#components/ui/button.ts';
-import { inputClass } from '#components/ui/input.ts';
 import { generateSample } from '#modules/resumes/actions/generate-sample.server.ts';
 import { resumeDocument } from '#modules/resumes/utils/ui/resume-document.ts';
 import type { ResumeDocument, TemplateId } from '#modules/resumes/types.ts';
@@ -36,25 +35,14 @@ export function sheetThumb(doc: ResumeDocument, scale: number, cls = '') {
     </fit-sheet>`;
 }
 
-/**
- * The "Generate a sample resume" form. With `brief` the user can steer the
- * sample; the template rides a hidden field. The button label reflects
- * whether Claude is configured (`ai`), so nobody waits for an API that is
- * not there.
- */
-export function sampleForm(opts: { ai: boolean; template?: TemplateId; brief?: boolean; variant?: 'default' | 'outline' | 'secondary'; size?: 'default' | 'sm' | 'lg' } = { ai: false }) {
-  const label = opts.ai ? 'Generate a sample with Claude' : 'Generate a sample resume';
+/** The "Generate a sample resume" form. The template rides a hidden field when a page wants one. */
+export function sampleForm(opts: { template?: TemplateId; variant?: 'default' | 'outline' | 'secondary'; size?: 'default' | 'sm' | 'lg' } = {}) {
   return html`
-    <form-pending class="block">
-      <form action=${generateSample} class="flex flex-wrap items-center gap-2">
-        ${opts.template ? html`<input type="hidden" name="template" value=${opts.template}>` : ''}
-        ${opts.brief ? html`
-          <label class="sr-only" for="brief">Describe the person</label>
-          <input id="brief" name="brief" class="${inputClass()} max-w-sm flex-1" placeholder=${opts.ai ? 'e.g. senior backend engineer in fintech' : 'A built-in sample is used until a Claude credential is set'} ?disabled=${!opts.ai}>` : ''}
-        <button type="submit" class=${buttonClass({ variant: opts.variant ?? 'outline', size: opts.size ?? 'default' })} data-pending=${opts.ai ? 'Generating with Claude…' : 'Creating…'}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM5 19l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/></svg>
-          ${label}
-        </button>
-      </form>
-    </form-pending>`;
+    <form action=${generateSample}>
+      ${opts.template ? html`<input type="hidden" name="template" value=${opts.template}>` : ''}
+      <button type="submit" class=${buttonClass({ variant: opts.variant ?? 'outline', size: opts.size ?? 'default' })}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM5 19l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/></svg>
+        Generate a sample resume
+      </button>
+    </form>`;
 }

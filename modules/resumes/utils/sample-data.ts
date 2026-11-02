@@ -1,6 +1,6 @@
-// Two complete, fictional resumes. The seed inserts them, the home page and the
-// templates gallery render them, and "Generate a sample" falls back to one of
-// them when no Claude credential is configured. Browser-safe and pure.
+// Three complete, fictional resumes. The seed inserts the first two, the home
+// page and the templates gallery render them, and "Generate a sample" picks
+// one at random. Browser-safe and pure.
 import { ACCENTS, type ResumeDocument, type TemplateId } from '../types.ts';
 
 export interface SampleResume { title: string; document: ResumeDocument }
@@ -125,7 +125,69 @@ export const SAMPLE_RESUMES: readonly SampleResume[] = [
       skills: ['Figma', 'Prototyping', 'Design systems', 'User research', 'HTML and CSS', 'Accessibility', 'Motion design'],
     },
   },
+  {
+    title: 'Data science roles',
+    document: {
+      template: 'minimal',
+      accent: ACCENTS[2].hex,
+      profile: {
+        fullName: 'Priya Raghunathan',
+        headline: 'Data Scientist',
+        email: 'priya@raghunathan.io',
+        phone: '+91 98765 43210',
+        location: 'Bengaluru, India',
+        website: 'raghunathan.io',
+        summary:
+          'Data scientist focused on forecasting and experimentation for marketplaces. Five years turning noisy operational data into models that ship, with a track record of pairing closely with product and finance to make the numbers matter.',
+      },
+      experience: [
+        {
+          company: 'Swift Basket',
+          role: 'Senior Data Scientist',
+          location: 'Bengaluru',
+          start: '2022-07',
+          end: '',
+          current: true,
+          highlights:
+            'Built the demand forecasting system (Python, LightGBM, Airflow) that cut grocery waste 18% across 40 dark stores\nDesigned the experimentation platform used for 120 A/B tests a quarter, with sequential testing to halve decision time\nMentor four analysts and run the weekly modelling review',
+        },
+        {
+          company: 'Harbor Insurance',
+          role: 'Data Scientist',
+          location: 'Pune',
+          start: '2019-08',
+          end: '2022-06',
+          current: false,
+          highlights:
+            'Shipped a claims triage model that routed 30% of claims to straight-through processing\nReplaced a spreadsheet pricing workflow with a reproducible pipeline reviewed by actuaries',
+        },
+      ],
+      education: [
+        {
+          school: 'IIT Madras',
+          degree: 'MTech',
+          field: 'Data Science',
+          start: '2017-07',
+          end: '2019-05',
+          notes: 'Thesis on hierarchical forecasting for retail demand.',
+        },
+      ],
+      projects: [
+        {
+          name: 'forecast-bench',
+          link: 'github.com/priyar/forecast-bench',
+          description: 'A benchmark suite comparing classical and gradient-boosted forecasters on public retail datasets.',
+        },
+      ],
+      skills: ['Python', 'SQL', 'pandas', 'LightGBM', 'PyTorch', 'Airflow', 'dbt', 'Experiment design', 'Causal inference'],
+    },
+  },
 ];
+
+/** One of the samples, chosen at random. */
+export function randomSample(): SampleResume {
+  return SAMPLE_RESUMES[Math.floor(Math.random() * SAMPLE_RESUMES.length)];
+}
 
 export function sampleFor(template: TemplateId): SampleResume {
   return SAMPLE_RESUMES.find((s) => s.document.template === template) ?? SAMPLE_RESUMES[0];

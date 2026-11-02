@@ -4,9 +4,7 @@ import { buttonClass } from '#components/ui/button.ts';
 import { badgeClass } from '#components/ui/badge.ts';
 import { pageHeader, sampleForm, sheetThumb } from '#lib/utils/ui.ts';
 import '#components/fit-sheet.ts';
-import '#components/form-pending.ts';
 import { listResumes } from '#modules/resumes/queries/list-resumes.server.ts';
-import { aiEnabled } from '#modules/resumes/queries/ai-status.server.ts';
 import { SAMPLE_RESUMES } from '#modules/resumes/utils/sample-data.ts';
 import { TEMPLATES } from '#modules/resumes/types.ts';
 import { timeAgo } from '#modules/resumes/utils/format.ts';
@@ -17,7 +15,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const [recent, ai] = await Promise.all([listResumes(), aiEnabled()]);
+  const recent = await listResumes();
   const templateName = (id: string) => TEMPLATES.find((t) => t.id === id)?.name ?? id;
   return html`
     <section class="grid items-center gap-12 py-8 lg:grid-cols-[1.1fr_0.9fr] lg:py-16">
@@ -27,9 +25,9 @@ export default async function Home() {
         <p class="m-0 mt-6 max-w-md text-lg text-muted-foreground">Fill in your details, pick one of three templates, and print a clean A4 PDF. No accounts, no clutter.</p>
         <div class="mt-8 flex flex-wrap items-center gap-3">
           <a href="/resumes/new" class=${buttonClass({ size: 'lg' })}>Create a resume</a>
-          ${sampleForm({ ai, size: 'lg' })}
+          ${sampleForm({ size: 'lg' })}
         </div>
-        <p class="m-0 mt-4 text-sm text-muted-foreground">${ai ? 'Samples are written by Claude from a one-line brief.' : 'Samples use built-in content until a Claude credential is configured.'}</p>
+        <p class="m-0 mt-4 text-sm text-muted-foreground">A sample is a complete, fictional resume you can edit or delete.</p>
       </div>
       <div class="group relative">
         <div class="rounded-2xl border border-border bg-muted/50 p-5 transition-colors group-hover:bg-muted sm:p-8">

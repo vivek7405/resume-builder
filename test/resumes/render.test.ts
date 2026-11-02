@@ -1,6 +1,5 @@
 // The three templates render every section from the sample data, and the
 // print page and the export route serve a real resume (and 404 a missing one).
-process.env.FOLIO_AI = 'off';
 process.env.DATABASE_URL ||= 'file:./db/dev.db';
 
 import { test, before, after } from 'node:test';

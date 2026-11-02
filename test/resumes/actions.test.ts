@@ -1,6 +1,5 @@
 // Drives every resume action through its REAL RPC endpoint (serializer, CSRF,
 // error sanitization), the same path the autosave island uses.
-process.env.FOLIO_AI = 'off';
 process.env.DATABASE_URL ||= 'file:./db/dev.db';
 
 import { test, before, after } from 'node:test';
@@ -127,15 +126,15 @@ test('duplicateResume copies the document under a new name', async () => {
   assert.equal(missing.success, false);
 });
 
-test('generateSample falls back to a built-in sample without a credential', async () => {
-  const result = await call<ResumeData>('generate-sample', 'generateSample', fd({ brief: 'anything', template: 'minimal' }));
+test('generateSample inserts a complete built-in sample in the requested template', async () => {
+  const result = await call<ResumeData>('generate-sample', 'generateSample', fd({ template: 'minimal' }));
   assert.ok(result.success && result.data);
   if (!result.success || !result.data) return;
   created.push(result.data.id);
   assert.equal(result.data.template, 'minimal');
   assert.ok(result.data.experience.length >= 1, 'a complete sample has experience');
   assert.ok(result.data.profile.fullName, 'a complete sample has a name');
-  assert.equal(result.redirect, `/resumes/${result.data.id}?sample=builtin`);
+  assert.equal(result.redirect, `/resumes/${result.data.id}?sample=1`);
 });
 
 test('listResumes searches title and name, and deleteResume removes a row', async () => {

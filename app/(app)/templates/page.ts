@@ -3,9 +3,7 @@ import type { Metadata } from '@webjsdev/core';
 import { buttonClass } from '#components/ui/button.ts';
 import { pageHeader, sampleForm, sheetThumb } from '#lib/utils/ui.ts';
 import '#components/fit-sheet.ts';
-import '#components/form-pending.ts';
 import { createResume } from '#modules/resumes/actions/create-resume.server.ts';
-import { aiEnabled } from '#modules/resumes/queries/ai-status.server.ts';
 import { TEMPLATES } from '#modules/resumes/types.ts';
 import { sampleFor } from '#modules/resumes/utils/sample-data.ts';
 
@@ -14,8 +12,7 @@ export const metadata: Metadata = {
   description: 'Three resume templates: Classic, Modern and Minimal. Switch any time without losing content.',
 };
 
-export default async function Templates() {
-  const ai = await aiEnabled();
+export default function Templates() {
   return html`
     ${pageHeader('Templates', 'Three layouts, one document. Pick one now and switch any time from the editor.')}
     <div class="grid gap-10 lg:grid-cols-3">
@@ -39,7 +36,7 @@ export default async function Templates() {
                 <input type="hidden" name="template" value=${t.id}>
                 <button type="submit" class=${buttonClass({ size: 'sm' })}>Start with ${t.name}</button>
               </form>
-              ${sampleForm({ ai, template: t.id, size: 'sm' })}
+              ${sampleForm({ template: t.id, size: 'sm' })}
             </div>
           </section>`;
       })}

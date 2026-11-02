@@ -1,7 +1,6 @@
 // The editor page with JavaScript off: every section is a bound form that
 // posts back to the page (303), and a validation failure re-renders the
 // editor at 422 with the error beside the field that caused it.
-process.env.FOLIO_AI = 'off';
 process.env.DATABASE_URL ||= 'file:./db/dev.db';
 
 import { test, before, after } from 'node:test';

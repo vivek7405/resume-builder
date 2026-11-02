@@ -156,9 +156,7 @@ export default async function Editor({ params, searchParams, actionData }: PageP
     ${sample ? html`
       <div class="mb-6 flex items-start gap-3 rounded-xl border border-border bg-muted/60 px-4 py-3 text-sm" role="status">
         ${ICON.sparkle}
-        <p class="m-0">${sample === 'ai'
-          ? 'This sample was written by Claude. Everything is fictional and editable.'
-          : 'This is a built-in sample. Set ANTHROPIC_API_KEY or ANTHROPIC_AUTH_TOKEN and Claude will write a fresh one from a brief.'}</p>
+        <p class="m-0">This is a sample resume. Everything in it is fictional. Edit anything, or delete it and start fresh.</p>
       </div>` : ''}
     ${actionData?.error ? html`<p class="mb-6 rounded-xl border border-destructive/40 bg-destructive/5 px-4 py-3 text-sm text-destructive" role="alert">${actionData.error}</p>` : ''}
 

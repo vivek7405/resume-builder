@@ -8,9 +8,7 @@ import { emptyClass, emptyContentClass, emptyDescriptionClass, emptyHeaderClass,
 import { cn } from '#lib/utils/cn.ts';
 import { pageHeader, sampleForm, sheetThumb } from '#lib/utils/ui.ts';
 import '#components/fit-sheet.ts';
-import '#components/form-pending.ts';
 import { listResumes, type ResumeSort } from '#modules/resumes/queries/list-resumes.server.ts';
-import { aiEnabled } from '#modules/resumes/queries/ai-status.server.ts';
 import { TEMPLATES } from '#modules/resumes/types.ts';
 import { timeAgo } from '#modules/resumes/utils/format.ts';
 
@@ -19,11 +17,11 @@ export const metadata: Metadata = { title: 'Resumes | Folio' };
 export default async function Resumes({ searchParams }: PageProps<'/resumes'>) {
   const q = String(searchParams.q ?? '').trim();
   const sort: ResumeSort = searchParams.sort === 'title' ? 'title' : 'updated';
-  const [rows, ai] = await Promise.all([listResumes({ q, sort }), aiEnabled()]);
+  const rows = await listResumes({ q, sort });
   const templateName = (id: string) => TEMPLATES.find((t) => t.id === id)?.name ?? id;
   return html`
     ${pageHeader('Resumes', `${rows.length} ${rows.length === 1 ? 'resume' : 'resumes'}${q ? ` matching "${q}"` : ''}`, html`
-      ${sampleForm({ ai, size: 'sm' })}
+      ${sampleForm({ size: 'sm' })}
       <a href="/resumes/new" class=${buttonClass({ size: 'sm' })}>New resume</a>
     `)}
 
@@ -51,7 +49,7 @@ export default async function Resumes({ searchParams }: PageProps<'/resumes'>) {
         <div class=${emptyContentClass()}>
           <div class="flex flex-wrap justify-center gap-2">
             <a href="/resumes/new" class=${buttonClass()}>Create a resume</a>
-            ${sampleForm({ ai })}
+            ${sampleForm()}
           </div>
         </div>
       </div>` : html`

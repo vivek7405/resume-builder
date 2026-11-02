@@ -5,9 +5,7 @@ import { inputClass } from '#components/ui/input.ts';
 import { fieldClass, fieldDescriptionClass, fieldErrorClass, fieldLabelClass } from '#components/ui/field.ts';
 import { pageHeader, sampleForm, sheetThumb } from '#lib/utils/ui.ts';
 import '#components/fit-sheet.ts';
-import '#components/form-pending.ts';
 import { createResume } from '#modules/resumes/actions/create-resume.server.ts';
-import { aiEnabled } from '#modules/resumes/queries/ai-status.server.ts';
 import { TEMPLATES } from '#modules/resumes/types.ts';
 import { SAMPLE_RESUMES } from '#modules/resumes/utils/sample-data.ts';
 
@@ -15,8 +13,7 @@ export const metadata: Metadata = { title: 'New resume | Folio' };
 
 interface NewProps { actionData?: { fieldErrors?: Record<string, string>; values?: Record<string, string> } }
 
-export default async function NewResume({ actionData }: NewProps) {
-  const ai = await aiEnabled();
+export default function NewResume({ actionData }: NewProps) {
   const errors = actionData?.fieldErrors ?? {};
   const values = actionData?.values ?? {};
   const chosen = values.template ?? 'classic';
@@ -55,10 +52,8 @@ export default async function NewResume({ actionData }: NewProps) {
 
     <section class="mt-14 max-w-3xl border-t border-border pt-10">
       <h2 class="m-0 text-lg font-semibold">Or start from a sample</h2>
-      <p class="m-0 mb-4 mt-1 text-sm text-muted-foreground">${ai
-        ? 'Describe a person in a few words and Claude writes a complete, fictional resume you can edit.'
-        : 'Creates a complete, fictional resume to edit. Set ANTHROPIC_API_KEY or ANTHROPIC_AUTH_TOKEN to have Claude write one from a brief instead.'}</p>
-      ${sampleForm({ ai, brief: true, variant: 'secondary' })}
+      <p class="m-0 mb-4 mt-1 text-sm text-muted-foreground">Creates a complete, fictional resume to edit or delete, so you can see what Folio produces.</p>
+      ${sampleForm({ variant: 'secondary' })}
     </section>
   `;
 }
