@@ -35,12 +35,15 @@ The e2e layer needs a Chromium: `bunx playwright install chromium`, then `CHROMI
 ## Layout
 
 ```
-app/(app)/            pages with the navbar: home, resumes, new, editor, delete, templates
+app/(app)/            pages with the navbar: home, resumes, new, editor, delete, templates, architecture
 app/(print)/          the bare print view and the JSON export route
 modules/resumes/      types, draft signal, queries, actions, islands, templates, pure utils
+modules/architecture/ the page parts and hand-drawn figures of the architecture pages
 components/           theme toggle, fit-sheet (scales an A4 sheet), the ui kit copies
 db/                   schema, connection, seed, migrations
 test/                 server, browser and e2e tests per feature
 ```
+
+How it all works is drawn at `/architecture` and `/architecture/internals` on the running app.
 
 The conventions, build order and framework rules live in `AGENTS.md` and `.agents/skills/webjs/`.

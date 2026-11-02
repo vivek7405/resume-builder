@@ -42,3 +42,11 @@ for (const path of PAGES) {
     for (const m of body.matchAll(/href="#([^"]+)"/g)) assert.match(body, new RegExp(`id="${m[1]}"`), `#${m[1]} has no target`);
   });
 }
+
+test('the home page links the architecture, and the primary nav does not', async () => {
+  const body = await (await testRequest(app.handle, '/')).text();
+  assert.match(body, /href="\/architecture"/);
+  const nav = body.match(/<nav[^>]*aria-label="Primary"[\s\S]*?<\/nav>/)?.[0] ?? '';
+  assert.ok(nav.length > 0, 'the page has a primary nav');
+  assert.doesNotMatch(nav, /architecture/);
+});

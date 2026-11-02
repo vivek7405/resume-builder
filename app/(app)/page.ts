@@ -65,5 +65,7 @@ export default async function Home() {
             </li>`)}
         </ul>
       </section>` : ''}
+
+    <p class="m-0 border-t border-border pt-6 text-sm text-muted-foreground">Curious how it is built? <a href="/architecture" class="text-foreground underline decoration-border-strong underline-offset-[3px] hover:decoration-foreground">Read the architecture</a>.</p>
   `;
 }

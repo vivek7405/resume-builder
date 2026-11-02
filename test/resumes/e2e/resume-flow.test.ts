@@ -154,6 +154,16 @@ describe('E2E: resume flow', { skip: !process.env.WEBJS_E2E && 'set WEBJS_E2E=1 
     assert.ok(overflow <= 0, `the page overflows by ${overflow}px`);
   });
 
+  test('the architecture pages keep their wide figures in their own scroll box at phone width', async () => {
+    await page.setViewport({ width: 390, height: 800 });
+    for (const path of ['/architecture', '/architecture/internals']) {
+      await page.goto(`${baseUrl}${path}`, { waitUntil: 'networkidle0', timeout: 20000 });
+      const overflow = await page.evaluate<number>('document.documentElement.scrollWidth - document.documentElement.clientWidth');
+      assert.ok(overflow <= 0, `${path} overflows by ${overflow}px`);
+    }
+    await page.setViewport({ width: 1280, height: 800 });
+  });
+
   test('deleting the resume from its confirmation page removes it', async () => {
     await page.goto(`${editorUrl}/delete`, { waitUntil: 'networkidle0', timeout: 20000 });
     await Promise.all([
