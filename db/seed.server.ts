@@ -1,4 +1,4 @@
-// Seed: run with `bun run db:seed`. Inserts the two sample resumes when the
+// Seed: run with `bun run db:seed`. Inserts the three sample resumes when the
 // table is empty, so the list and the editor render real rows while building.
 import { db } from './connection.server.ts';
 import { resumes } from './schema.server.ts';

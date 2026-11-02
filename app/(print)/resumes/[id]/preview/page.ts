@@ -22,7 +22,7 @@ export default async function Preview({ params }: PageProps<'/resumes/[id]/previ
   const template = TEMPLATES.find((t) => t.id === resume.template)?.name ?? 'Classic';
   return html`
     <div class="min-h-dvh bg-muted/60 print:bg-paper">
-      <div class="no-print sticky top-0 z-10 border-b border-border bg-background/85 backdrop-blur">
+      <div class="no-print border-b border-border bg-background">
         <div class="mx-auto flex max-w-[210mm] flex-wrap items-center justify-between gap-3 px-4 py-3">
           <a href="/resumes/${resume.id}" class="${buttonClass({ variant: 'ghost', size: 'sm' })} -ml-2 text-muted-foreground">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>

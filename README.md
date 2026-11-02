@@ -17,7 +17,7 @@ Built on [WebJs](https://webjs.dev): server-rendered pages, small web-component 
 ```sh
 bun install
 bun run db:generate && bun run db:migrate   # create the SQLite schema
-bun run db:seed                              # two sample resumes
+bun run db:seed                              # three sample resumes
 bun --bun run dev                            # http://localhost:8080
 ```
 

@@ -1,4 +1,4 @@
-// Three complete, fictional resumes. The seed inserts the first two, the home
+// Three complete, fictional resumes. The seed inserts all three, the home
 // page and the templates gallery render them, and "Generate a sample" picks
 // one at random. Browser-safe and pure.
 import { ACCENTS, type ResumeDocument, type TemplateId } from '../types.ts';
