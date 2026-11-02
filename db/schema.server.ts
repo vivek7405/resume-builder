@@ -1,21 +1,28 @@
 import { defineRelations } from 'drizzle-orm';
-import { table, pk, uuidPk, text, bool, json, createdAt } from './columns.server.ts';
+import { table, uuidPk, text, json, createdAt, updatedAt } from './columns.server.ts';
+import type { Profile, ExperienceEntry, EducationEntry, ProjectEntry, TemplateId } from '#modules/resumes/types.ts';
 
-// Example model. Feel free to delete or extend.
-export const users = table('users', {
-  id: pk(),
-  email: text().notNull().unique(),
-  name: text(),
-  // JSON column: a structured value persisted as JSON, typed via json<T>().
-  // Same helper works on SQLite and Postgres. Delete if you do not need it.
-  settings: json<{ theme?: string }>(),
+// One row per resume. The sections are JSON columns rather than child tables:
+// a resume is always edited and rendered as one document, so the whole thing
+// travels together and every write replaces one section wholesale.
+export const resumes = table('resumes', {
+  id: uuidPk(),
+  // The internal name shown in the list ("Backend roles 2026"), never printed.
+  title: text().notNull(),
+  template: text().$type<TemplateId>().notNull().default('classic'),
+  // A hex colour from the ACCENTS palette in modules/resumes/types.ts.
+  accent: text().notNull().default('#1c1b19'),
+  profile: json<Profile>().notNull(),
+  experience: json<ExperienceEntry[]>().notNull(),
+  education: json<EducationEntry[]>().notNull(),
+  projects: json<ProjectEntry[]>().notNull(),
+  skills: json<string[]>().notNull(),
   createdAt: createdAt(),
+  updatedAt: updatedAt(),
 });
 
-
-// Relations live here (one defineRelations for the whole schema). Empty
-// for now; add per-model relations as your schema grows.
-export const relations = defineRelations({ users }, () => ({}));
+export const relations = defineRelations({ resumes }, () => ({}));
 
 // Derived types, never hand-written.
-export type User = typeof users.$inferSelect;
+export type ResumeRow = typeof resumes.$inferSelect;
+export type ResumeInsert = typeof resumes.$inferInsert;
