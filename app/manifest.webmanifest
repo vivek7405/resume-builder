@@ -1,10 +1,11 @@
 {
-  "name": "Resume Builder",
-  "short_name": "Resume Builder",
+  "name": "Folio",
+  "short_name": "Folio",
+  "description": "A minimalistic resume builder.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#ffffff",
+  "background_color": "#fbfaf8",
+  "theme_color": "#1c1b19",
   "icons": [
     {
       "src": "/icon.svg",
