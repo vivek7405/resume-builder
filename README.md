@@ -32,6 +32,16 @@ bun run ci -- --only Tests   # one layer while iterating
 
 The e2e layer needs a Chromium: `bunx playwright install chromium`, then `CHROMIUM_PATH=$(node -e "console.log(require('playwright-core').chromium.executablePath())")` as the workflow does.
 
+## Deploy
+
+Live at https://resume-builder.pilotrun.app, on [pilots](https://pilots.run). `compose.pilots.yaml` describes the service, with SQLite on a volume so resumes survive a deploy.
+
+- A push to `main` deploys.
+- A pull request gets its own preview at `pr-<number>-resume-builder.pilotrun.app`, with its own empty database. The pilots GitHub App posts the link on the pull request and destroys the preview when it closes.
+- To deploy by hand, run `pilot deploy` in this directory.
+
+The app has no accounts, so anyone with the address can read, change and delete every resume on it.
+
 ## Layout
 
 ```
