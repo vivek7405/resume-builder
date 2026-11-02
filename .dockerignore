@@ -34,6 +34,10 @@ db/dev.db-*
 *.log
 npm-debug.log*
 
+# local agent and browser state, which a directory deploy would otherwise tar
+.claude.json
+.playwright-mcp
+
 # editors / OS
 .vscode
 .idea
