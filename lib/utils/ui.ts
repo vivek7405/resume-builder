@@ -1,13 +1,16 @@
 // App-wide html fragments: repeated markup chunks rendered at SSR time.
 //
-// No side-effect component imports here on purpose: a bare import in a
-// non-component module makes every page that reaches it ship whole. The
-// pages that render these fragments import fit-sheet
-// themselves, which keeps them import-only.
+// The pages that render sheetThumb import fit-sheet themselves, so the island
+// is emitted only where a sheet appears.
+//
+// The elision analyser matches the bare word for the browser's document
+// global, including inside a kebab-case import path or a property name. Keep
+// that word out of code reached by a page, or the page ships whole. This is
+// why the fragment is resume-sheet.ts and the sample field is doc.
 import { html } from '@webjsdev/core';
 import { buttonClass } from '#components/ui/button.ts';
 import { generateSample } from '#modules/resumes/actions/generate-sample.server.ts';
-import { resumeDocument } from '#modules/resumes/utils/ui/resume-document.ts';
+import { resumeSheet } from '#modules/resumes/utils/ui/resume-sheet.ts';
 import type { ResumeDocument, TemplateId } from '#modules/resumes/types.ts';
 
 /** The page title row: an h1, an optional lede, and actions on the right. */
@@ -31,7 +34,7 @@ export function pageHeader(title: unknown, lede?: unknown, actions?: unknown) {
 export function sheetThumb(doc: ResumeDocument, scale: number, cls = '') {
   return html`
     <fit-sheet class="block w-full ${cls}" style="--s-guess: ${scale}" inert aria-hidden="true">
-      ${resumeDocument(doc)}
+      ${resumeSheet(doc)}
     </fit-sheet>`;
 }
 

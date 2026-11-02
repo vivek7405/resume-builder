@@ -17,7 +17,7 @@ export default function Templates() {
     ${pageHeader('Templates', 'Three layouts, one document. Pick one now and switch any time from the editor.')}
     <div class="grid gap-10 lg:grid-cols-3">
       ${TEMPLATES.map((t) => {
-        const doc = { ...sampleFor(t.id).document, template: t.id };
+        const doc = { ...sampleFor(t.id).doc, template: t.id };
         return html`
           <section class="flex flex-col gap-4">
             <div class="relative">

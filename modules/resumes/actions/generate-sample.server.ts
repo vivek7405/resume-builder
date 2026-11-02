@@ -14,11 +14,11 @@ import { editorPath } from '../utils/store.server.ts';
 export async function generateSample(formData: FormData): Promise<ActionResult<ResumeData>> {
   const templateRaw = String(formData.get('template') ?? '');
   const sample = randomSample();
-  const template: TemplateId = isTemplateId(templateRaw) ? templateRaw : sample.document.template;
+  const template: TemplateId = isTemplateId(templateRaw) ? templateRaw : sample.doc.template;
   const accent = ACCENTS[Math.floor(Math.random() * ACCENTS.length)].hex;
   const [row] = await db
     .insert(resumes)
-    .values({ title: `Sample: ${sample.document.profile.headline}`, ...sample.document, template, accent })
+    .values({ title: `Sample: ${sample.doc.profile.headline}`, ...sample.doc, template, accent })
     .returning();
   return { success: true, data: row, redirect: `${editorPath(row.id)}?sample=1` };
 }

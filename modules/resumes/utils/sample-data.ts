@@ -3,12 +3,12 @@
 // one at random. Browser-safe and pure.
 import { ACCENTS, type ResumeDocument, type TemplateId } from '../types.ts';
 
-export interface SampleResume { title: string; document: ResumeDocument }
+export interface SampleResume { title: string; doc: ResumeDocument }
 
 export const SAMPLE_RESUMES: readonly SampleResume[] = [
   {
     title: 'Backend roles 2026',
-    document: {
+    doc: {
       template: 'classic',
       accent: ACCENTS[1].hex,
       profile: {
@@ -65,7 +65,7 @@ export const SAMPLE_RESUMES: readonly SampleResume[] = [
   },
   {
     title: 'Product design portfolio',
-    document: {
+    doc: {
       template: 'modern',
       accent: ACCENTS[3].hex,
       profile: {
@@ -127,7 +127,7 @@ export const SAMPLE_RESUMES: readonly SampleResume[] = [
   },
   {
     title: 'Data science roles',
-    document: {
+    doc: {
       template: 'minimal',
       accent: ACCENTS[2].hex,
       profile: {
@@ -190,5 +190,5 @@ export function randomSample(): SampleResume {
 }
 
 export function sampleFor(template: TemplateId): SampleResume {
-  return SAMPLE_RESUMES.find((s) => s.document.template === template) ?? SAMPLE_RESUMES[0];
+  return SAMPLE_RESUMES.find((s) => s.doc.template === template) ?? SAMPLE_RESUMES[0];
 }

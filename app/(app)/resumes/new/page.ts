@@ -35,7 +35,7 @@ export default function NewResume({ actionData }: NewProps) {
           ${TEMPLATES.map((t) => html`
             <label class="group relative flex cursor-pointer flex-col gap-3 rounded-2xl border border-border bg-card p-3 transition-colors hover:border-border-strong has-[:checked]:border-foreground has-[:checked]:ring-1 has-[:checked]:ring-foreground">
               <input type="radio" name="template" value=${t.id} ?checked=${chosen === t.id} class="sr-only">
-              <div class="rounded-lg bg-muted/60 p-2">${sheetThumb({ ...SAMPLE_RESUMES[0].document, template: t.id }, 0.3)}</div>
+              <div class="rounded-lg bg-muted/60 p-2">${sheetThumb({ ...SAMPLE_RESUMES[0].doc, template: t.id }, 0.3)}</div>
               <span class="px-1 pb-1">
                 <span class="block text-sm font-semibold">${t.name}</span>
                 <span class="block text-xs text-muted-foreground">${t.blurb}</span>

@@ -5,9 +5,9 @@ import { getResume } from '#modules/resumes/queries/get-resume.server.ts';
 export async function GET(_req: Request, { params }: RouteHandlerContext<'/resumes/[id]/export'>) {
   const resume = await getResume(params.id);
   if (!resume) return new Response('Not found', { status: 404 });
-  const { id: _id, createdAt: _c, updatedAt: _u, ...document } = resume;
+  const { id: _id, createdAt: _c, updatedAt: _u, ...doc } = resume;
   const name = resume.title.replace(/[^\w.-]+/g, '-').replace(/^-+|-+$/g, '') || 'resume';
-  return new Response(JSON.stringify(document, null, 2), {
+  return new Response(JSON.stringify(doc, null, 2), {
     headers: {
       'content-type': 'application/json; charset=utf-8',
       'content-disposition': `attachment; filename="${name}.json"`,

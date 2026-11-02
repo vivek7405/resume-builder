@@ -9,7 +9,7 @@ if (existing.length > 0) {
   console.log(`Seed skipped: ${existing.length} resume(s) already present.`);
 } else {
   for (const sample of SAMPLE_RESUMES) {
-    await db.insert(resumes).values({ title: sample.title, ...sample.document });
+    await db.insert(resumes).values({ title: sample.title, ...sample.doc });
   }
   console.log(`Seeded ${SAMPLE_RESUMES.length} resumes.`);
 }

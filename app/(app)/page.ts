@@ -31,7 +31,7 @@ export default async function Home() {
       </div>
       <div class="group relative">
         <div class="rounded-2xl border border-border bg-muted/50 p-5 transition-colors group-hover:bg-muted sm:p-8">
-          ${sheetThumb(SAMPLE_RESUMES[0].document, 0.56, 'shadow-[0_1px_2px_rgba(0,0,0,0.06),0_24px_48px_-24px_rgba(0,0,0,0.35)]')}
+          ${sheetThumb(SAMPLE_RESUMES[0].doc, 0.56, 'shadow-[0_1px_2px_rgba(0,0,0,0.06),0_24px_48px_-24px_rgba(0,0,0,0.35)]')}
         </div>
         <a href="/templates" class="absolute inset-0 rounded-2xl" aria-label="Browse the templates"></a>
       </div>

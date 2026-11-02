@@ -8,15 +8,15 @@ import { renderToString } from '@webjsdev/core/server';
 import { createRequestHandler, invokeActionForTest } from '@webjsdev/server';
 import { testRequest } from '@webjsdev/server/testing';
 import type { ActionResult } from '@webjsdev/server';
-import { resumeDocument } from '#modules/resumes/utils/ui/resume-document.ts';
+import { resumeSheet } from '#modules/resumes/utils/ui/resume-sheet.ts';
 import { SAMPLE_RESUMES } from '#modules/resumes/utils/sample-data.ts';
 import { emptyDocument, TEMPLATES, type ResumeData } from '#modules/resumes/types.ts';
 
-const sample = SAMPLE_RESUMES[0].document;
+const sample = SAMPLE_RESUMES[0].doc;
 
 for (const t of TEMPLATES) {
   test(`${t.name} template renders name, roles, highlights, education, projects and skills`, async () => {
-    const out = await renderToString(resumeDocument({ ...sample, template: t.id }));
+    const out = await renderToString(resumeSheet({ ...sample, template: t.id }));
     assert.match(out, /Maya Okafor/);
     assert.match(out, /Senior Backend Engineer/);
     assert.match(out, /Lumen Pay/);
@@ -31,7 +31,7 @@ for (const t of TEMPLATES) {
 }
 
 test('an empty document shows a name placeholder and no empty sections', async () => {
-  const out = await renderToString(resumeDocument(emptyDocument('minimal')));
+  const out = await renderToString(resumeSheet(emptyDocument('minimal')));
   assert.match(out, /Your name/);
   assert.doesNotMatch(out, /Experience/);
   assert.doesNotMatch(out, /Skills/);

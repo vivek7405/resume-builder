@@ -2,7 +2,7 @@ import { html, notFound } from '@webjsdev/core';
 import type { Metadata, MetadataContext, PageProps } from '@webjsdev/core';
 import { buttonClass } from '#components/ui/button.ts';
 import { getResume } from '#modules/resumes/queries/get-resume.server.ts';
-import { resumeDocument } from '#modules/resumes/utils/ui/resume-document.ts';
+import { resumeSheet } from '#modules/resumes/utils/ui/resume-sheet.ts';
 import { TEMPLATES } from '#modules/resumes/types.ts';
 import '#modules/resumes/components/print-button.ts';
 
@@ -37,7 +37,7 @@ export default async function Preview({ params }: PageProps<'/resumes/[id]/previ
       </div>
       <div class="mx-auto flex max-w-[calc(210mm+2rem)] justify-start overflow-x-auto px-4 py-8 print:p-0 sm:justify-center">
         <div class="shrink-0 shadow-[0_1px_2px_rgba(0,0,0,0.06),0_12px_40px_-12px_rgba(0,0,0,0.25)] print:shadow-none">
-          ${resumeDocument(resume)}
+          ${resumeSheet(resume)}
         </div>
       </div>
     </div>

@@ -7,7 +7,7 @@ import { modernTemplate } from './templates/modern.ts';
 import { minimalTemplate } from './templates/minimal.ts';
 
 /** An A4 sheet. `.resume-sheet` is what the print stylesheet targets. */
-export function resumeDocument(doc: ResumeDocument) {
+export function resumeSheet(doc: ResumeDocument) {
   const padded = doc.template !== 'modern';
   return html`
     <article class="resume-sheet box-border w-[210mm] min-h-[297mm] bg-paper text-paper-foreground ${padded ? 'px-[18mm] py-[16mm]' : ''}" style="--accent: ${doc.accent}" lang="en">

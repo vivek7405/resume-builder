@@ -15,7 +15,7 @@ suite('editor islands', () => {
   teardown(() => { window.removeEventListener('submit', cancel); resetDraft(); });
 
   test('<resume-preview> renders the seeded document and follows the draft', async () => {
-    const doc = SAMPLE_RESUMES[0].document;
+    const doc = SAMPLE_RESUMES[0].doc;
     const el = await ssrFixture(html`<resume-preview .resume=${doc}></resume-preview>`);
     assert(el.querySelector('h1').textContent.includes('Maya Okafor'), 'renders the seeded name');
     assert(baseDocument.get() && baseDocument.get().profile.fullName === 'Maya Okafor', 'publishes the base document');
@@ -44,7 +44,7 @@ suite('editor islands', () => {
       </draft-form>`);
     // After the fixture: creating it tears the previous one down, and the
     // previous test's preview resets the draft when it disconnects.
-    baseDocument.set({ ...SAMPLE_RESUMES[0].document });
+    baseDocument.set({ ...SAMPLE_RESUMES[0].doc });
     const role = el.querySelector('input[name="role"]');
     role.value = 'Staff Engineer';
     role.dispatchEvent(new Event('input', { bubbles: true }));
