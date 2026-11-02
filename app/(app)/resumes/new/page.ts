@@ -4,6 +4,8 @@ import { buttonClass } from '#components/ui/button.ts';
 import { inputClass } from '#components/ui/input.ts';
 import { fieldClass, fieldDescriptionClass, fieldErrorClass, fieldLabelClass } from '#components/ui/field.ts';
 import { pageHeader, sampleForm, sheetThumb } from '#lib/utils/ui.ts';
+import '#components/fit-sheet.ts';
+import '#components/form-pending.ts';
 import { createResume } from '#modules/resumes/actions/create-resume.server.ts';
 import { aiEnabled } from '#modules/resumes/queries/ai-status.server.ts';
 import { TEMPLATES } from '#modules/resumes/types.ts';

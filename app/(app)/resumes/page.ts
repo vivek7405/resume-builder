@@ -7,6 +7,8 @@ import { nativeSelectClass, nativeSelectIconClass, nativeSelectWrapperClass } fr
 import { emptyClass, emptyContentClass, emptyDescriptionClass, emptyHeaderClass, emptyTitleClass } from '#components/ui/empty.ts';
 import { cn } from '#lib/utils/cn.ts';
 import { pageHeader, sampleForm, sheetThumb } from '#lib/utils/ui.ts';
+import '#components/fit-sheet.ts';
+import '#components/form-pending.ts';
 import { listResumes, type ResumeSort } from '#modules/resumes/queries/list-resumes.server.ts';
 import { aiEnabled } from '#modules/resumes/queries/ai-status.server.ts';
 import { TEMPLATES } from '#modules/resumes/types.ts';

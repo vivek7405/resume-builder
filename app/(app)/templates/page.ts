@@ -2,6 +2,8 @@ import { html } from '@webjsdev/core';
 import type { Metadata } from '@webjsdev/core';
 import { buttonClass } from '#components/ui/button.ts';
 import { pageHeader, sampleForm, sheetThumb } from '#lib/utils/ui.ts';
+import '#components/fit-sheet.ts';
+import '#components/form-pending.ts';
 import { createResume } from '#modules/resumes/actions/create-resume.server.ts';
 import { aiEnabled } from '#modules/resumes/queries/ai-status.server.ts';
 import { TEMPLATES } from '#modules/resumes/types.ts';

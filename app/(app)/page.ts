@@ -3,6 +3,8 @@ import type { Metadata } from '@webjsdev/core';
 import { buttonClass } from '#components/ui/button.ts';
 import { badgeClass } from '#components/ui/badge.ts';
 import { pageHeader, sampleForm, sheetThumb } from '#lib/utils/ui.ts';
+import '#components/fit-sheet.ts';
+import '#components/form-pending.ts';
 import { listResumes } from '#modules/resumes/queries/list-resumes.server.ts';
 import { aiEnabled } from '#modules/resumes/queries/ai-status.server.ts';
 import { SAMPLE_RESUMES } from '#modules/resumes/utils/sample-data.ts';

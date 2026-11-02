@@ -1,12 +1,15 @@
 // App-wide html fragments: repeated markup chunks rendered at SSR time.
+//
+// No side-effect component imports here on purpose: a bare import in a
+// non-component module makes every page that reaches it ship whole. The
+// pages that render these fragments import fit-sheet and form-pending
+// themselves, which keeps them import-only.
 import { html } from '@webjsdev/core';
 import { buttonClass } from '#components/ui/button.ts';
 import { inputClass } from '#components/ui/input.ts';
 import { generateSample } from '#modules/resumes/actions/generate-sample.server.ts';
 import { resumeDocument } from '#modules/resumes/utils/ui/resume-document.ts';
 import type { ResumeDocument, TemplateId } from '#modules/resumes/types.ts';
-import '#components/fit-sheet.ts';
-import '#components/form-pending.ts';
 
 /** The page title row: an h1, an optional lede, and actions on the right. */
 export function pageHeader(title: unknown, lede?: unknown, actions?: unknown) {
