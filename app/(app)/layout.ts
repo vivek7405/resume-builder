@@ -1,6 +1,7 @@
 import { html } from '@webjsdev/core';
 import type { LayoutProps } from '@webjsdev/core';
 import { buttonClass } from '#components/ui/button.ts';
+import { cn } from '#lib/utils/cn.ts';
 import '#components/theme-toggle.ts';
 
 /**
@@ -30,7 +31,7 @@ export default function AppLayout({ children, url }: LayoutProps) {
         <nav class="flex items-center gap-5" aria-label="Primary">
           ${link('/resumes', 'Resumes')}
           ${link('/templates', 'Templates')}
-          <a href="/resumes/new" class="${buttonClass({ size: 'sm' })} hidden sm:inline-flex">New resume</a>
+          <a href="/resumes/new" class=${cn(buttonClass({ size: 'sm' }), 'hidden sm:inline-flex')}>New resume</a>
           <theme-toggle></theme-toggle>
         </nav>
       </div>

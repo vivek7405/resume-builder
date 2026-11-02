@@ -119,12 +119,18 @@ export default function RootLayout({ children }: LayoutProps) {
         fit-sheet > [data-frame] { --s: calc(100cqw / 210mm); }
       }
 
+      /* Tints and accents print without the browser's Background graphics option. */
+      .resume-sheet { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
       /* Print: the resume sheet alone, on A4, with no chrome. */
       @page { size: A4; margin: 0; }
       @media print {
         html, body { background: #ffffff !important; padding: 0 !important; }
         .no-print { display: none !important; }
-        .resume-sheet { box-shadow: none !important; margin: 0 !important; width: 210mm !important; min-height: 0 !important; }
+        /* The screen wrappers (min-h-dvh, flex, overflow-x-auto) add a blank page. */
+        .print-flow { display: block !important; min-height: 0 !important; max-width: none !important; overflow: visible !important; padding: 0 !important; margin: 0 !important; background: #ffffff !important; box-shadow: none !important; }
+        /* Just under A4, so a one-page resume fills the page without spilling over. */
+        .resume-sheet { margin: 0 !important; width: 210mm !important; min-height: 296mm !important; }
       }
       @media (prefers-reduced-motion: reduce) {
         *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }

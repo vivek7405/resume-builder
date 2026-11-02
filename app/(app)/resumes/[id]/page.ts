@@ -160,7 +160,7 @@ export default async function Editor({ params, searchParams, actionData }: PageP
       </div>` : ''}
     ${actionData?.error ? html`<p class="mb-6 rounded-xl border border-destructive/40 bg-destructive/5 px-4 py-3 text-sm text-destructive" role="alert">${actionData.error}</p>` : ''}
 
-    <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] xl:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
+    <div class="grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] xl:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
       <div class="flex flex-col gap-10">
         ${sectionShell('profile', 'Profile', 'Who you are and how to reach you.', card(html`
           <draft-form section="profile" class="block">

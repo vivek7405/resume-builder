@@ -18,6 +18,8 @@ type Page = {
   waitForNavigation(opts?: { waitUntil?: string; timeout?: number }): Promise<unknown>;
   evaluate<T>(fn: string): Promise<T>;
   on(event: string, handler: (e: Error) => void): void;
+  pdf(opts: { preferCSSPageSize?: boolean }): Promise<Uint8Array>;
+  setViewport(v: { width: number; height: number }): Promise<void>;
 };
 type Browser = { newPage(): Promise<Page>; close(): Promise<void> };
 type Puppeteer = { launch(opts: { executablePath?: string; headless?: boolean; args?: string[] }): Promise<Browser> };
@@ -115,6 +117,36 @@ describe('E2E: resume flow', { skip: !process.env.WEBJS_E2E && 'set WEBJS_E2E=1 
     assert.equal(hasHeader, false);
     const sheetText = await page.evaluate<string>('document.querySelector(".resume-sheet").textContent');
     assert.match(sheetText, /Ada Lovelace/);
+  });
+
+  test('a short resume prints to exactly one A4 page in every template', async () => {
+    const id = editorUrl.split('/').pop();
+    for (const template of ['classic', 'modern', 'minimal']) {
+      await page.goto(editorUrl, { waitUntil: 'networkidle0', timeout: 20000 });
+      await page.evaluate(`document.querySelector('input[name="template"][value="${template}"]').click()`);
+      await page.waitForFunction('document.querySelector(\'draft-form[section="settings"] [data-status]\').dataset.status === "saved"', { timeout: 10000 });
+      await page.goto(`${baseUrl}/resumes/${id}/preview`, { waitUntil: 'networkidle0', timeout: 20000 });
+      const pdf = Buffer.from(await page.pdf({ preferCSSPageSize: true })).toString('latin1');
+      const pages = (pdf.match(/\/Type\s*\/Page[^s]/g) ?? []).length;
+      assert.equal(pages, 1, `${template} printed ${pages} pages`);
+    }
+  });
+
+  test('the editor has no horizontal page scroll at phone width', async () => {
+    await page.setViewport({ width: 390, height: 800 });
+    await page.goto(editorUrl, { waitUntil: 'networkidle0', timeout: 20000 });
+    const overflow = await page.evaluate<number>('document.documentElement.scrollWidth - document.documentElement.clientWidth');
+    await page.setViewport({ width: 1280, height: 800 });
+    assert.ok(overflow <= 0, `the page overflows by ${overflow}px`);
+  });
+
+  test('deleting the resume from its confirmation page removes it', async () => {
+    await page.goto(`${editorUrl}/delete`, { waitUntil: 'networkidle0', timeout: 20000 });
+    await Promise.all([
+      page.waitForNavigation({ waitUntil: 'networkidle0', timeout: 20000 }),
+      page.evaluate('document.querySelector(\'main form button[type="submit"]\').click()'),
+    ]);
+    assert.match(page.url(), /\/resumes$/);
   });
 
   test('no JavaScript errors across the flow', () => {
