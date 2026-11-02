@@ -20,10 +20,15 @@ export function pageHeader(title: unknown, lede?: unknown, actions?: unknown) {
     </div>`;
 }
 
-/** A sheet scaled to its container. `scale` is the first-paint guess (container width / 794px). */
+/**
+ * A decorative sheet scaled to its container. `scale` is the first-paint
+ * guess (container width / 794px). The sheet carries links of its own, so it
+ * is inert and never placed inside another anchor: nested anchors make the
+ * HTML parser hoist the sheet out of its scaler.
+ */
 export function sheetThumb(doc: ResumeDocument, scale: number, cls = '') {
   return html`
-    <fit-sheet class="block w-full ${cls}" style="--s: ${scale}">
+    <fit-sheet class="block w-full ${cls}" style="--s: ${scale}" inert aria-hidden="true">
       ${resumeDocument(doc)}
     </fit-sheet>`;
 }

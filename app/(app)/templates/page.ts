@@ -21,9 +21,12 @@ export default async function Templates() {
         const doc = { ...sampleFor(t.id).document, template: t.id };
         return html`
           <section class="flex flex-col gap-4">
-            <a href="/resumes/new" class="block rounded-2xl border border-border bg-muted/50 p-4 transition-colors hover:bg-muted" aria-label="Start a ${t.name} resume">
-              ${sheetThumb(doc, 0.46, 'shadow-[0_1px_2px_rgba(0,0,0,0.06),0_18px_40px_-20px_rgba(0,0,0,0.35)]')}
-            </a>
+            <div class="relative">
+              <div class="rounded-2xl border border-border bg-muted/50 p-4 transition-colors hover:bg-muted">
+                ${sheetThumb(doc, 0.46, 'shadow-[0_1px_2px_rgba(0,0,0,0.06),0_18px_40px_-20px_rgba(0,0,0,0.35)]')}
+              </div>
+              <a href="/resumes/new" class="absolute inset-0 rounded-2xl" aria-label="Start a ${t.name} resume"></a>
+            </div>
             <div>
               <h2 class="m-0 font-display text-3xl leading-none">${t.name}</h2>
               <p class="m-0 mt-2 text-sm text-muted-foreground">${t.blurb}</p>

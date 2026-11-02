@@ -29,11 +29,12 @@ export default async function Home() {
         </div>
         <p class="m-0 mt-4 text-sm text-muted-foreground">${ai ? 'Samples are written by Claude from a one-line brief.' : 'Samples use built-in content until a Claude credential is configured.'}</p>
       </div>
-      <a href="/templates" class="group block no-underline" aria-label="Browse the templates">
+      <div class="group relative">
         <div class="rounded-2xl border border-border bg-muted/50 p-5 transition-colors group-hover:bg-muted sm:p-8">
           ${sheetThumb(SAMPLE_RESUMES[0].document, 0.56, 'shadow-[0_1px_2px_rgba(0,0,0,0.06),0_24px_48px_-24px_rgba(0,0,0,0.35)]')}
         </div>
-      </a>
+        <a href="/templates" class="absolute inset-0 rounded-2xl" aria-label="Browse the templates"></a>
+      </div>
     </section>
 
     <section class="grid gap-8 border-t border-border py-12 sm:grid-cols-3">
