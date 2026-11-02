@@ -1,0 +1,16 @@
+{
+  "name": "Folio",
+  "short_name": "Folio",
+  "description": "A minimalistic resume builder.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fbfaf8",
+  "theme_color": "#1c1b19",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
