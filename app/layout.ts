@@ -127,10 +127,13 @@ export default function RootLayout({ children }: LayoutProps) {
       @media print {
         html, body { background: #ffffff !important; padding: 0 !important; }
         .no-print { display: none !important; }
-        /* The screen wrappers (min-h-dvh, flex, overflow-x-auto) add a blank page. */
+        /* On paper the sheet is the whole page, so the screen backdrop and layout go. */
         .print-flow { display: block !important; min-height: 0 !important; max-width: none !important; overflow: visible !important; padding: 0 !important; margin: 0 !important; background: #ffffff !important; box-shadow: none !important; }
         /* Just under A4, so a one-page resume fills the page without spilling over. */
         .resume-sheet { margin: 0 !important; width: 210mm !important; min-height: 296mm !important; }
+        /* A long resume: entries stay whole, and each continuation page repeats the padding. */
+        .resume-sheet article { break-inside: avoid; }
+        .resume-sheet, .resume-sheet > div > * { -webkit-box-decoration-break: clone; box-decoration-break: clone; }
       }
       @media (prefers-reduced-motion: reduce) {
         *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
