@@ -1,11 +1,14 @@
 import { WebComponent, html } from '@webjsdev/core';
 
 /**
- * Scales a slotted A4 sheet (210mm wide) to the host's width. The page passes
- * a first-paint scale through the --s custom property on the host, so the SSR
- * layout is already close; after hydration a ResizeObserver keeps it exact
- * and sizes the frame to the scaled sheet height so a long resume is never
- * clipped and a short one leaves no gap.
+ * Scales a slotted A4 sheet (210mm wide) to the host's width.
+ *
+ * The scale is computed in CSS first (root layout: the host is a size
+ * container and the frame's --s is calc(100cqw / 210mm)), so the first paint
+ * is exact and nothing jumps on hydration. Browsers without typed arithmetic
+ * fall back to the --s-guess the page passes on the host. After hydration a
+ * ResizeObserver writes the same number and sizes the frame to the scaled
+ * sheet height so a long resume is never clipped and a short one leaves no gap.
  */
 export class FitSheet extends WebComponent {
   private observer: ResizeObserver | null = null;
@@ -15,20 +18,23 @@ export class FitSheet extends WebComponent {
     const width = this.getBoundingClientRect().width;
     if (!width) return;
     const scale = width / SHEET_PX;
-    this.style.setProperty('--s', scale.toFixed(4));
-    const sheet = this.querySelector<HTMLElement>('.resume-sheet');
+    const inner = this.querySelector<HTMLElement>('[data-frame] > div');
     const frame = this.querySelector<HTMLElement>('[data-frame]');
-    if (sheet && frame && sheet.offsetHeight) frame.style.height = `${sheet.offsetHeight * scale}px`;
+    if (!frame) return;
+    frame.style.setProperty('--s', scale.toFixed(4));
+    if (inner && inner.offsetHeight) frame.style.height = `${inner.offsetHeight * scale}px`;
   };
 
   // The slotted sheet is projected one microtask after the first client
   // render, so the observers are attached here rather than in connectedCallback.
+  // The inner wrapper is observed (not the slotted article), since the preview
+  // swaps the article when the template changes.
   firstUpdated() {
     this.observer = new ResizeObserver(this.fit);
     this.observer.observe(this);
     queueMicrotask(() => {
-      const sheet = this.querySelector('.resume-sheet');
-      if (sheet) this.observer?.observe(sheet);
+      const inner = this.querySelector('[data-frame] > div');
+      if (inner) this.observer?.observe(inner);
       this.fit();
     });
   }

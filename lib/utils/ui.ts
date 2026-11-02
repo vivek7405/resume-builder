@@ -28,7 +28,7 @@ export function pageHeader(title: unknown, lede?: unknown, actions?: unknown) {
  */
 export function sheetThumb(doc: ResumeDocument, scale: number, cls = '') {
   return html`
-    <fit-sheet class="block w-full ${cls}" style="--s: ${scale}" inert aria-hidden="true">
+    <fit-sheet class="block w-full ${cls}" style="--s-guess: ${scale}" inert aria-hidden="true">
       ${resumeDocument(doc)}
     </fit-sheet>`;
 }

@@ -110,6 +110,15 @@ export default function RootLayout({ children }: LayoutProps) {
       }
       ::selection { background: var(--primary-tint); }
 
+      /* <fit-sheet> (components/fit-sheet.ts): the host is a size container and
+         its frame scales a 210mm sheet to the host width in pure CSS, so the
+         first paint is exact. Without typed arithmetic the page's guess applies. */
+      fit-sheet { container-type: inline-size; }
+      fit-sheet > [data-frame] { --s: var(--s-guess, 0.4); }
+      @supports (opacity: calc(1px / 1px)) {
+        fit-sheet > [data-frame] { --s: calc(100cqw / 210mm); }
+      }
+
       /* Print: the resume sheet alone, on A4, with no chrome. */
       @page { size: A4; margin: 0; }
       @media print {
