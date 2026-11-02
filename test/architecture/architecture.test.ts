@@ -11,7 +11,7 @@ import { join } from 'node:path';
 import { createRequestHandler } from '@webjsdev/server';
 import { testRequest } from '@webjsdev/server/testing';
 
-const PAGES = ['/architecture'];
+const PAGES = ['/architecture', '/architecture/internals'];
 const ROOT = join(import.meta.dirname, '..', '..');
 
 let app: Awaited<ReturnType<typeof createRequestHandler>>;

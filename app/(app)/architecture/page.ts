@@ -70,7 +70,8 @@ export default function ArchitecturePage() {
         <div class="mt-10">
           ${cells([
             ['Pages render, islands respond', html`A page is a function that returns HTML on the server. Anything
-              interactive lives in a custom element, and only those five reach the browser as app code.`],
+              interactive lives in a custom element, and only those five, with the modules they import, reach the
+              browser as app code.`],
             ['Actions are the only way in', html`Every write is a ${C("'use server'")} function that takes
               ${C('FormData')}. A form can post to it, and an island can call it over RPC.`],
             ['A sheet is just HTML', html`Resumes are A4 articles styled with Tailwind utilities. The PDF comes

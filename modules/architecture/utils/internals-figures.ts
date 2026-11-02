@@ -10,6 +10,8 @@ import { C } from './page.ts';
 export function keystrokeFigure() {
   const L = { f: 80, d: 270, s: 460, p: 650, a: 810, db: 930 };
   const y = (i: number) => 104 + i * 38;
+  // A card-coloured strip behind a note, so a lifeline does not run through its words.
+  const strip = (x: number, cy: number, w: number) => html`<rect x=${x} y=${cy - 11} width=${w} height="16" class="fill-card"></rect>`;
   const msg = (i: number, from: number, to: number, label: string, kind: 'solid' | 'signal' = 'solid') => {
     const dir = to > from ? 1 : -1;
     return arrow({ d: `M ${from + dir * 2} ${y(i)} H ${to - dir * 3}`, label, lx: (from + to) / 2, ly: y(i) - 6, kind });
@@ -30,11 +32,13 @@ export function keystrokeFigure() {
       ${msg(0, L.f, L.d, 'input event')}
       ${msg(1, L.d, L.s, 'patchDraft(parsed)', 'signal')}
       ${msg(2, L.s, L.p, 're-render: saved + draft', 'signal')}
+      ${strip(L.d + 4, y(3) + 4, 372)}
       ${note({ x: L.d + 8, y: y(3) + 4, text: 'a timer waits AUTOSAVE_MS (700), and each new input restarts it' })}
       ${msg(4, L.d, L.a, 'updateProfile(FormData) over RPC')}
       ${msg(5, L.a, L.db, 'patchResume')}
       ${msg(6, L.a, L.d, '{ success: true }')}
-      ${note({ x: L.d + 8, y: y(7) - 2, text: 'status: Unsaved changes, Saving…, Saved, or the error' })}
+      ${strip(L.d + 4, y(7) - 2, 330)}
+      ${note({ x: L.d + 8, y: y(7) - 2, text: 'status line: Unsaved changes, Saving, Saved, or the error' })}
     `,
     caption: html`Both sides parse with the same pure functions, in ${C('parse-section.ts')}, so what the sheet
       shows while typing is what the action stores. The other sections call ${C('updateSettings')},
@@ -99,7 +103,7 @@ export function printFigure() {
     ${line(x + 12, y + 14, 110)}${line(x + 12, y + 28, 146)}${line(x + 12, y + 42, 128)}`;
   return figure({
     label: 'On paper the toolbar and backdrop go away, and a long resume breaks between entries, never inside one, with the padding repeated on each page.',
-    viewBox: '0 0 1000 340',
+    viewBox: '0 0 1000 345',
     minW: 'min-w-[820px]',
     body: html`
       ${frame({ x: 20, y: 20, w: 270, h: 300, label: 'on screen' })}
@@ -109,16 +113,19 @@ export function printFigure() {
       ${arrow({ d: 'M 294 170 H 376', label: '@media print', lx: 335, ly: 164 })}
 
       ${frame({ x: 390, y: 20, w: 210, h: 300, label: 'page 1, A4, margin 0', tone: 'plain' })}
-      ${entry(410, 48)}${entry(410, 122)}
-      ${note({ x: 495, y: 225, text: 'not enough room left', anchor: 'middle' })}
-      ${note({ x: 495, y: 240, text: 'for the next entry', anchor: 'middle' })}
+      ${entry(410, 48)}${entry(410, 122)}${entry(410, 196)}
+      <rect x="410" y="268" width="170" height="62" rx="6" class="fill-none stroke-primary [stroke-dasharray:3_3]" stroke-width="1"></rect>
+      ${note({ x: 495, y: 292, text: 'the next entry would', anchor: 'middle' })}
+      ${note({ x: 495, y: 306, text: 'cross the page edge', anchor: 'middle' })}
 
-      ${frame({ x: 620, y: 20, w: 210, h: 300, label: 'page 2', tone: 'plain' })}
+      ${frame({ x: 620, y: 20, w: 210, h: 300, label: 'page 2, padding repeated', tone: 'plain' })}
       ${entry(640, 48, 'signal')}${entry(640, 122)}
 
-      ${arrow({ d: 'M 580 262 H 605 V 79 H 636', label: 'whole', lx: 600, ly: 258, anchor: 'end', kind: 'signal' })}
+      ${arrow({ d: 'M 584 299 H 605 V 79 H 636', kind: 'signal' })}
+      ${note({ x: 725, y: 212, text: 'the entry moved whole,', anchor: 'middle' })}
+      ${note({ x: 725, y: 226, text: 'never split', anchor: 'middle' })}
 
-      ${card({ x: 850, y: 48, w: 130, h: 158, label: 'rules', lines: ['break-inside:', '  avoid', 'box-decoration-', '  break: clone', 'print-color-', '  adjust: exact'] })}
+      ${card({ x: 850, y: 48, w: 130, h: 136, label: 'rules', lines: ['break-inside:', '  avoid', 'box-decoration-', '  break: clone', 'print-color-', '  adjust: exact'] })}
     `,
   });
 }

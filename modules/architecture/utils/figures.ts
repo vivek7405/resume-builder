@@ -10,7 +10,7 @@ import { html } from '@webjsdev/core';
 /** The whole system: one process, one file, and five small scripts. */
 export function systemFigure() {
   return figure({
-    label: 'Folio is one WebJs process on Bun and one SQLite file. The browser receives HTML that works on its own, and five islands are the only JavaScript the app itself ships.',
+    label: 'Folio is one WebJs process on Bun and one SQLite file. The browser receives HTML that works on its own, and five islands, with the modules they import, are the only JavaScript the app itself ships.',
     viewBox: '0 0 1000 370',
     minW: 'min-w-[820px]',
     body: html`
@@ -55,10 +55,10 @@ export function dataFigure() {
       ${box({ x: 440, y: 124, w: 180, h: 60, label: 'projects', sub: 'array of entries' })}
       ${box({ x: 240, y: 200, w: 380, h: 60, label: 'skills', sub: 'array of strings' })}
 
-      ${card({ x: 720, y: 48, w: 260, h: 150, label: 'saveEntry', tone: 'strong', lines: ['1. findResume(id)', '2. copy the entries array', '3. replace entries[index]', '4. patchResume(id, { [section] })', '   updatedAt moves with it'] })}
+      ${card({ x: 720, y: 48, w: 260, h: 132, label: 'saveEntry', tone: 'strong', lines: ['1. findResume(id)', '2. copy the entries array', '3. replace entries[index]', '4. patchResume(id, { [section] })', '   updatedAt moves with it'] })}
       ${arrow({ d: 'M 716 90 H 624', label: 'whole array', lx: 670, ly: 84, kind: 'signal' })}
-      ${note({ x: 720, y: 224, text: 'An entry is addressed by its index.' })}
-      ${note({ x: 720, y: 240, text: 'There are no child tables and no joins.' })}
+      ${note({ x: 720, y: 206, text: 'An entry is addressed by its index.' })}
+      ${note({ x: 720, y: 222, text: 'There are no child tables and no joins.' })}
     `,
   });
 }
