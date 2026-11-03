@@ -66,6 +66,8 @@ export default async function Home() {
         </ul>
       </section>` : ''}
 
+    <p class="m-0 text-sm font-medium text-foreground" data-preview-check>Pilots PR preview check: if you can read this, you are on the preview, not production.</p>
+
     <p class="m-0 border-t border-border pt-6 text-sm text-muted-foreground">Curious how it is built? <a href="/architecture" class="text-foreground underline decoration-border-strong underline-offset-[3px] hover:decoration-foreground">Read the architecture</a>.</p>
   `;
 }
