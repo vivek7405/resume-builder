@@ -164,7 +164,7 @@ Workflow skills for this repo live in `.claude/skills/`, and
 - `file-issue` files tracked work on the Resume Builder board.
 - `start-work` begins an issue: worktree, draft PR, definition of done, merging.
 - `list-todos` reads what is open on the board.
-- `ready-for-dev` writes a verified plan into an issue body.
+- `plan-issue` writes a short, verified plan into an issue body and moves its card to Planned.
 - `research-record` keeps a writeup with no code as a closed `research` issue.
 - `doc-sync` maps the doc surfaces a change has to keep true.
 

@@ -45,11 +45,13 @@ if has '\b(work on|start on|start work on|begin work on|pick up|tackle|start|beg
   add_match "start-work: this begins a tracked issue. Invoke the start-work skill before making changes."
 fi
 
-if has '\bready for (dev|development|implementation)\b' \
+if has '\bplan (issue )?#[0-9]+' \
+   || has '\bplan (this|that|the) issue\b' \
+   || has '\bready for (dev|development|implementation)\b' \
    || has '\bimplementation[- ]ready\b' \
    || has '\b(write|create) (an? |the )?implementation plans?\b' \
    || has '\b(scope out|prep|prepare) (issue )?#[0-9]+'; then
-  add_match "ready-for-dev: this asks for a verified plan in an issue body. Invoke the ready-for-dev skill. It writes no code."
+  add_match "plan-issue: this asks for a short, verified plan in an issue body. Invoke the plan-issue skill. It writes no code and is meant to take minutes."
 fi
 
 if has "\bwhat'?s (open|pending|in progress|on the board)\b" \

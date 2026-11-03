@@ -26,15 +26,18 @@ The board at https://github.com/users/vivek7405/projects/15 is the source of tru
 
    Pass `--limit`, because the default page is 30 and a larger board would silently truncate.
 
-2. **Bucket by Status:** Todo, In Progress, Done. A card with no status goes in its own "No status" bucket, so it does not disappear.
+2. **Bucket by Status:** Todo, Planned, In Progress, Done. A card with no status goes in its own "No status" bucket, so it does not disappear.
 
-3. **Show** Todo, In Progress, and any No status cards. Show Done only if the user asks for it or if everything else is empty. If the user asked for one bucket, show that one.
+3. **Show** Todo, Planned, In Progress, and any No status cards. Show Done only if the user asks for it or if everything else is empty. If the user asked for one bucket, show that one.
 
 4. **For each item,** show `#<number>  <title>`.
 
 ```
 Todo:
   #12  Add PDF export
+
+Planned:
+  (none)
 
 In Progress:
   (none)

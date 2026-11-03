@@ -10,7 +10,7 @@ import { join } from 'node:path';
 const ROOT = join(import.meta.dirname, '..', '..');
 const ROUTER = join(ROOT, '.claude/hooks/route-skills.sh');
 const SKILLS_DIR = join(ROOT, '.claude/skills');
-const SKILLS = ['file-issue', 'start-work', 'list-todos', 'ready-for-dev', 'research-record', 'doc-sync'];
+const SKILLS = ['file-issue', 'start-work', 'list-todos', 'plan-issue', 'research-record', 'doc-sync'];
 
 function route(prompt: string): { status: number | null; stdout: string } {
   const run = spawnSync('bash', [ROUTER], { input: JSON.stringify({ prompt }), encoding: 'utf8' });
@@ -36,9 +36,11 @@ const ROUTED: [string, string][] = [
   ['pick up #12', 'start-work'],
   ['start work on the rate limit', 'start-work'],
   ["let's work on the export issue", 'start-work'],
-  ['get #12 ready for development', 'ready-for-dev'],
-  ['make those todos implementation-ready', 'ready-for-dev'],
-  ['scope out #12', 'ready-for-dev'],
+  ['plan #12', 'plan-issue'],
+  ['plan this issue', 'plan-issue'],
+  ['get #12 ready for development', 'plan-issue'],
+  ['make those todos implementation-ready', 'plan-issue'],
+  ['scope out #12', 'plan-issue'],
   ["what's open?", 'list-todos'],
   ['what should I work on', 'list-todos'],
   ['show me the board', 'list-todos'],
@@ -71,6 +73,8 @@ const SILENT = [
   'what does this function return',
   'Is there a mandatory review required for merging the PR?',
   'the docs folder is large',
+  'what is the plan for #12',
+  'the plan issue came up again',
 ];
 
 for (const prompt of SILENT) {
@@ -102,6 +106,17 @@ test('every skill the router names exists, and every repo skill is routed', () =
   const named = [...readFileSync(ROUTER, 'utf8').matchAll(/add_match "([a-z-]+):/g)].map((match) => match[1]);
   assert.deepEqual(named.sort(), [...SKILLS].sort());
   assert.deepEqual(readdirSync(SKILLS_DIR).sort(), [...SKILLS].sort());
+});
+
+test('every board status a skill sets has an id in gh-ids.env', () => {
+  const ids = readFileSync(join(ROOT, '.claude/gh-ids.env'), 'utf8');
+  for (const skill of SKILLS) {
+    const source = readFileSync(join(SKILLS_DIR, skill, 'SKILL.md'), 'utf8');
+    for (const [, name] of source.matchAll(/"\$(STATUS_[A-Z_]+)"/g)) {
+      if (name === 'STATUS_FIELD_ID') continue;
+      assert.match(ids, new RegExp(`^${name}=\\S+$`, 'm'), `${skill} uses ${name}`);
+    }
+  }
 });
 
 for (const skill of SKILLS) {
