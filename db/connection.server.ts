@@ -17,9 +17,19 @@ const g = globalThis as unknown as { __webjs_db?: unknown };
 // writer throws `database is locked` immediately. Restore a 5s wait (the old
 // better-sqlite3 default) so contended access waits, and WAL so readers proceed
 // alongside one writer.
-function tune<T extends { exec(sql: string): unknown }>(client: T): T {
+//
+// Switching to WAL needs the file to itself, so it can fail when another process
+// holds the database, as parallel test files do on a fresh one. That is no reason
+// to fail: WAL is stored in the file, so a later open makes the switch if nobody
+// finishes it, and until then this connection works in rollback mode. The message
+// is the check because the error code differs between Node and Bun.
+export function tune<T extends { exec(sql: string): unknown }>(client: T): T {
   client.exec('PRAGMA busy_timeout = 5000');
-  client.exec('PRAGMA journal_mode = WAL');
+  try {
+    client.exec('PRAGMA journal_mode = WAL');
+  } catch (err) {
+    if (!(err instanceof Error) || err.message !== 'database is locked') throw err;
+  }
   return client;
 }
 
