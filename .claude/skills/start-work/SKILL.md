@@ -46,7 +46,7 @@ If several match, ask which one.
      -F n=<N> --jq '.data.repository.issue.projectItems.nodes[] | select(.project.number == 15)'
    ```
 
-   An empty result means it is not on the board. Add it the way `file-issue` does. If it is already In Progress, ask whether to continue the existing branch.
+   An empty result means it is not on the board. Add it the way `file-issue` does. If it is already In Progress, ask whether to continue the existing branch. If it is in Planned, the issue body is the plan: follow it, and check the paths it cites against current code first.
 
 3. **Cut a worktree and push its branch.** One task, one worktree, always, because another agent in the same checkout can move HEAD and put a commit on the wrong branch. Pick the prefix from the label: `enhancement` is `feat/`, `bug` is `fix/`, `documentation` is `docs/`, anything else is `chore/`. Build the slug from the title, in lowercase kebab-case, at most 30 characters.
 
@@ -130,7 +130,16 @@ This repo uses merge commits. Delete the branch as its own step, because `--dele
 
 ## After a merge
 
-- **Set the card to Done.** Merging closes the issue but does not move the card on this board.
+- **Check the card reached Done.** Merging with `Closes #<N>` closes the issue, and the board's `Item closed` automation moves the card within seconds, so there is nothing to do by hand when it works. Read it to confirm:
+
+  ```sh
+  gh api graphql -f query='query($n:Int!){repository(owner:"vivek7405",name:"resume-builder"){
+    issue(number:$n){state projectItems(first:5){nodes{id project{number}
+    fieldValueByName(name:"Status"){...on ProjectV2ItemFieldSingleSelectValue{name}}}}}}}' \
+    -F n=<N> --jq '.data.repository.issue | [.state, (.projectItems.nodes[] | select(.project.number == 15) | .fieldValueByName.name)] | @tsv'
+  ```
+
+  If it is not Done, tell the user the automation missed it, then set it:
 
   ```sh
   source .claude/gh-ids.env
