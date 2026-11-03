@@ -15,4 +15,4 @@ only says where each rule lives, so no rule is stated twice.
   skill's "Project Layout".
 - **Server boundary, progressive enhancement, typing**: the skill's "What WebJs
   Is", "Core WebJs Rules", and "Default Workflow".
-- **Git, tests, and `bun run ci`**: `.agents/rules/workflow.md`.
+- **Git, tests, and CI (GitHub Actions)**: `.agents/rules/workflow.md`.

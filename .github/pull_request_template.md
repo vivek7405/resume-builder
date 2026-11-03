@@ -4,7 +4,7 @@
 
 ## Test plan
 
-- [ ] `webjs ci` passes locally (the `webjs.ci` step list in package.json: `webjs check`, `webjs doctor`, `webjs typecheck`, the dependency audit, and the server / browser / e2e test layers; CI runs the same list)
+- [ ] Every GitHub Actions check is green on this PR (`webjs check`, `webjs doctor`, `webjs typecheck`, the dependency audit, and the server / browser / e2e test layers)
 - [ ] Unit tests added/updated
 - [ ] E2E tests added/updated for user-facing changes (`WEBJS_E2E=1 webjs test`)
 

@@ -32,14 +32,16 @@ and the browser check for a UI app.
 2. Browser tests in `test/<feature>/browser/*.test.js` for hydration, DOM, slots,
    and the client router.
 3. Documentation stays in sync on the SAME PR as the code, never a follow-up.
-4. `bun run ci` must pass before you push. It runs the step list declared in
-   `package.json` under `webjs.ci`, one result line per step: `webjs check`
-   (correctness), `webjs doctor` (project health), `webjs typecheck`, a
-   dependency audit, then the server, browser, and e2e test layers. The GitHub
-   workflow runs the same list on every PR and push, so the two cannot drift;
-   `bun run ci -- --only Tests` runs one layer while you iterate, and
-   `bun run ci -- --signoff` posts a green commit status (basecamp/gh-signoff)
-   a branch-protection rule can require. Doctor fails on whatever your
+4. GitHub Actions is the CI gate. `.github/workflows/ci.yml` runs on every PR and
+   every push to main, one job per check: `webjs check` (correctness),
+   `webjs doctor` (project health), `webjs typecheck`, a dependency audit, then
+   the server, browser, and e2e test layers. Push and read the result with
+   `gh pr checks`. A full local run is not required before a push, which
+   overrides the skill's "before every push" line. While you iterate, run only
+   the check you are working on: `bun run ci -- --only "Tests: server"`, by its
+   title in the `webjs.ci` list in `package.json`. A check added to that list
+   also needs an entry in the workflow's matrix, and
+   `test/ci/ci-workflow.test.ts` fails until it has one. Doctor fails on whatever your
    `package.json` `webjs.doctor.gate` marks `error`, which starts as the
    un-versioned stylesheet link check, plus the two hard toolchain checks that
    default to `error` with no gate entry at all: `NODE_VERSION` (the Node

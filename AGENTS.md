@@ -125,12 +125,12 @@ base-class factory (the skill's "Core WebJs Rules" 11). Use the shorthand for pr
 
 ### 7. Verify before you call it done
 
-Run `bun run ci` and fix what it reports. It runs every gate declared under
-`webjs.ci` in `package.json` (`webjs check`, `webjs doctor`, `webjs typecheck`,
-a dependency audit, then the server, browser, and e2e test layers for the
-features you built), and the GitHub workflow runs the
-same list; `.agents/rules/workflow.md` has what each gate checks. While
-iterating, `bun run ci -- --only Tests` runs one layer. Then
+Push and fix what GitHub Actions reports (`gh pr checks`). The workflow runs
+every check as its own job (`webjs check`, `webjs doctor`, `webjs typecheck`, a
+dependency audit, then the server, browser, and e2e test layers for the features
+you built), and it is the gate, so a full local run is not required;
+`.agents/rules/workflow.md` has what each check does. While iterating,
+`bun run ci -- --only "Tests: server"` runs one check locally. Then
 `bun run css:build` (compile Tailwind).
 
 Then boot `bun --bun run dev`, confirm every page route returns HTTP 200, and open
@@ -148,7 +148,7 @@ bun --bun run start                # production server
 bun run test                     # unit + browser tests
 bun run typecheck
 bun run css:build            # compile Tailwind
-bun run ci                   # every gate, one command (the webjs.ci steps in package.json)
+bun run ci -- --only "Types" # one check locally, by its title in webjs.ci (the gate is GitHub Actions)
 bun run check                # correctness checks
 bun run doctor               # project health (severity per check: webjs.doctor.gate)
 bunx webjsdev ui add <name>   # copy a ui primitive into components/ui/
