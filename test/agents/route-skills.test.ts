@@ -1,6 +1,7 @@
 // The prompt router decides from text, so these hold both of its failure modes:
 // a request that no longer reaches its skill, and an ordinary sentence that gets
-// routed anyway, which is the false positive this router exists to avoid.
+// routed anyway, which is the false positive this router exists to avoid. The
+// standing policy is separate and goes out on every prompt.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
@@ -11,6 +12,8 @@ const ROOT = join(import.meta.dirname, '..', '..');
 const ROUTER = join(ROOT, '.claude/hooks/route-skills.sh');
 const SKILLS_DIR = join(ROOT, '.claude/skills');
 const SKILLS = ['file-issue', 'start-work', 'list-todos', 'plan-issue', 'research-record', 'doc-sync'];
+// Routed to, but not in this repo: personal skills, and one built into Claude Code.
+const EXTERNAL = ['pr-review', 'pilots', 'run'];
 
 function route(prompt: string): { status: number | null; stdout: string } {
   const run = spawnSync('bash', [ROUTER], { input: JSON.stringify({ prompt }), encoding: 'utf8' });
@@ -28,6 +31,7 @@ function routedSkills(prompt: string): string[] {
 const ROUTED: [string, string][] = [
   ['File an issue on the board for the export bug', 'file-issue'],
   ['open an issue about the broken preview', 'file-issue'],
+  ['open a github issue for this', 'file-issue'],
   ['can you create a new task for this', 'file-issue'],
   ['track this as a todo', 'file-issue'],
   ['make this an issue', 'file-issue'],
@@ -51,6 +55,13 @@ const ROUTED: [string, string][] = [
   ['find the doc gaps', 'doc-sync'],
   ['did we update the docs for this?', 'doc-sync'],
   ['sync the docs', 'doc-sync'],
+  ['review the PR', 'pr-review'],
+  ['review #12', 'pr-review'],
+  ['do a code review of this', 'pr-review'],
+  ['verify the fix', 'run'],
+  ['make sure the editor still works', 'run'],
+  ['redeploy the service', 'pilots'],
+  ['can we roll back', 'pilots'],
 ];
 
 for (const [prompt, skill] of ROUTED) {
@@ -59,7 +70,7 @@ for (const [prompt, skill] of ROUTED) {
   });
 }
 
-const SILENT = [
+const UNROUTED = [
   'the file has an issue with the import',
   'the file that has an issue',
   'why does this file open with an issue banner',
@@ -75,17 +86,30 @@ const SILENT = [
   'the docs folder is large',
   'what is the plan for #12',
   'the plan issue came up again',
+  'the code review passed',
+  'is the review of this done',
+  'it was deployed yesterday',
 ];
 
-for (const prompt of SILENT) {
-  test(`stays silent on "${prompt}"`, () => {
-    assert.deepEqual(route(prompt), { status: 0, stdout: '' });
+for (const prompt of UNROUTED) {
+  test(`routes nothing for "${prompt}"`, () => {
+    assert.deepEqual(routedSkills(prompt), []);
   });
 }
+
+test('the standing policy goes out on every prompt, routed or not', () => {
+  for (const prompt of ['what does this function return', 'file an issue']) {
+    const context = JSON.parse(route(prompt).stdout).hookSpecificOutput.additionalContext;
+    assert.match(context, /skill policy/);
+    assert.match(context, /check the available skills/);
+  }
+});
 
 test('routed output tells the model the repo skill wins over a webjs one', () => {
   const context = JSON.parse(route('file an issue').stdout).hookSpecificOutput.additionalContext;
   assert.match(context, /take the place of any webjs-\* skill/);
+  const unrouted = JSON.parse(route('what does this function return').stdout).hookSpecificOutput.additionalContext;
+  assert.doesNotMatch(unrouted, /webjs-\*/);
 });
 
 test('the router ignores a payload with no prompt', () => {
@@ -104,7 +128,7 @@ test('settings.json wires the router on UserPromptSubmit, and it is executable',
 
 test('every skill the router names exists, and every repo skill is routed', () => {
   const named = [...readFileSync(ROUTER, 'utf8').matchAll(/add_match "([a-z-]+):/g)].map((match) => match[1]);
-  assert.deepEqual(named.sort(), [...SKILLS].sort());
+  assert.deepEqual(named.sort(), [...SKILLS, ...EXTERNAL].sort());
   assert.deepEqual(readdirSync(SKILLS_DIR).sort(), [...SKILLS].sort());
 });
 
