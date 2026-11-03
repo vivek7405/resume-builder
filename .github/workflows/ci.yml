@@ -1,6 +1,6 @@
 name: CI
 
-# GitHub Actions is the CI for resume-builder: this workflow is the gate, on
+# GitHub Actions is the CI for resume-builder: this workflow runs every check on
 # every PR into main and every push to main. A push is all it takes to run it,
 # so nothing has to pass on a developer machine first.
 #

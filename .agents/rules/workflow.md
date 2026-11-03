@@ -32,7 +32,7 @@ and the browser check for a UI app.
 2. Browser tests in `test/<feature>/browser/*.test.js` for hydration, DOM, slots,
    and the client router.
 3. Documentation stays in sync on the SAME PR as the code, never a follow-up.
-4. GitHub Actions is the CI gate. `.github/workflows/ci.yml` runs on every PR and
+4. CI runs in GitHub Actions. `.github/workflows/ci.yml` runs on every PR and
    every push to main, one job per check: `webjs check` (correctness),
    `webjs doctor` (project health), `webjs typecheck`, a dependency audit, then
    the server, browser, and e2e test layers. Push and read the result with
