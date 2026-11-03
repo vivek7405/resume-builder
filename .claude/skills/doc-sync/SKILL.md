@@ -22,10 +22,12 @@ For any change, decide per surface whether it applies, then update it or write "
 2. **`AGENTS.md`**: the build playbook and the commands. It is the first thing an agent reads.
 3. **`.agents/rules/workflow.md`**: git, tests, CI, and merge rules.
 4. **`CONVENTIONS.md`**: only says where each rule lives, so it changes when a rule moves.
-5. **`app/(app)/architecture/page.ts` and `app/(app)/architecture/internals/page.ts`**: the published description of how the app works. These rot when code moves, and `test/architecture/architecture.test.ts` fails on a cited file that no longer exists.
-6. **`.github/pull_request_template.md`** and the header of **`.github/workflows/ci.yml`**: the PR gate and how CI is run.
-7. **`.hooks/pre-commit`** and **`.claude/`** (`settings.json`, `hooks/`, `skills/`, `gh-ids.env`): comments and skills that restate a workflow rule.
-8. **`compose.pilots.yaml`** and **`.env.example`**: the deployed shape and the configuration.
+5. **`ARCHITECTURE.md`**: the rules that hold the app together, and what enforces each one. The design itself is on the architecture pages below. `test/agents/docs.test.ts` fails on a cited path that no longer exists.
+6. **`PRODUCT-PRINCIPLES.md`**: what the product is for. Changing it is the owner's decision, so raise it rather than editing it to fit a change.
+7. **`app/(app)/architecture/page.ts` and `app/(app)/architecture/internals/page.ts`**: the published description of how the app works. These rot when code moves, and `test/architecture/architecture.test.ts` fails on a cited file that no longer exists.
+8. **`.github/pull_request_template.md`** and the header of **`.github/workflows/ci.yml`**: the PR gate and how CI is run.
+9. **`.hooks/pre-commit`** and **`.claude/`** (`settings.json`, `hooks/`, `skills/`, `gh-ids.env`): comments and skills that restate a workflow rule.
+10. **`compose.pilots.yaml`** and **`.env.example`**: the deployed shape and the configuration.
 
 `.agents/skills/webjs/` is the framework's own reference. It describes WebJs, not this app, so do not edit it for an app change. If this repo deliberately departs from it, say so in `workflow.md`.
 
@@ -53,7 +55,7 @@ A change touching many surfaces can fan the reads out: one read-only `Explore` a
 
    ```sh
    git grep -n -iE '<token1>|<token2>' -- \
-     README.md AGENTS.md CONVENTIONS.md .agents/rules .github .hooks .claude \
+     README.md AGENTS.md CONVENTIONS.md ARCHITECTURE.md PRODUCT-PRINCIPLES.md .agents/rules .github .hooks .claude \
      'app/(app)/architecture' compose.pilots.yaml .env.example
    ```
 

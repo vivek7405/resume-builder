@@ -7,6 +7,7 @@
     "#*": "./*"
   },
   "scripts": {
+    "prepare": "git config core.hooksPath .hooks 2>/dev/null || true",
     "css:build": "bun --bun tailwindcss -i ./public/input.css -o ./public/tailwind.css --minify",
     "gallery:clear": "bun scripts/clear-gallery.mjs",
     "dev": "bun --bun webjs dev",

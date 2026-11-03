@@ -11,9 +11,9 @@ import { join } from 'node:path';
 const ROOT = join(import.meta.dirname, '..', '..');
 const ROUTER = join(ROOT, '.claude/hooks/route-skills.sh');
 const SKILLS_DIR = join(ROOT, '.claude/skills');
-const SKILLS = ['file-issue', 'start-work', 'list-todos', 'plan-issue', 'research-record', 'doc-sync'];
-// Routed to, but not in this repo: personal skills, and one built into Claude Code.
-const EXTERNAL = ['pr-review', 'pilots', 'run'];
+const SKILLS = ['file-issue', 'start-work', 'list-todos', 'plan-issue', 'pr-review', 'research-record', 'doc-sync'];
+// Routed to, but not in this repo: a personal skill, and one built into Claude Code.
+const EXTERNAL = ['pilots', 'run'];
 
 function route(prompt: string): { status: number | null; stdout: string } {
   const run = spawnSync('bash', [ROUTER], { input: JSON.stringify({ prompt }), encoding: 'utf8' });

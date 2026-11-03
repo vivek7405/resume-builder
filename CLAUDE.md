@@ -10,8 +10,9 @@ end. A finished implementation with zero commits is a mistake here, because git
 history is the user's revert and cherry-pick safety net.
 
 The full git contract (branches, commit messages, attribution) is
-`.agents/rules/workflow.md` "Git rules"; the
-`.claude/hooks/guard-branch-context.sh` hook refuses a commit on `main`. Two hooks back this up: the
+`.agents/rules/workflow.md` "Git rules". `.hooks/pre-commit` refuses a commit on
+`main`, and `.claude/hooks/require-worktree-for-edits.sh` refuses an edit in the
+primary checkout. Two hooks back this up: the
 `.claude/hooks/nudge-uncommitted.sh` PostToolUse hook reminds you while
 uncommitted changes pile up during work, and the
 `.claude/hooks/commit-before-stop.sh` Stop hook stops you from ending a turn

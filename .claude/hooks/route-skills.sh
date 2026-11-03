@@ -13,8 +13,8 @@
 # near each other ("the file has an issue"). A false route costs more than a
 # miss, because the policy and the skills' own descriptions catch what this misses.
 #
-# pr-review and pilots are personal skills, and run is built into Claude Code,
-# so they live outside this repo. The rest are in .claude/skills.
+# pilots is a personal skill and run is built into Claude Code, so they live
+# outside this repo. The rest are in .claude/skills.
 #
 # The global router in ~/.claude stays silent in a checkout with this file.
 # The directive below still says which skill wins, for a machine where it does not.

@@ -58,4 +58,6 @@ test/                 server, browser and e2e tests per feature
 
 How it all works is drawn at `/architecture` and `/architecture/internals` on the running app.
 
-The conventions, build order and framework rules live in `AGENTS.md` and `.agents/skills/webjs/`.
+[`ARCHITECTURE.md`](ARCHITECTURE.md) points at those pages and lists the rules that hold the app together and what enforces each one. [`PRODUCT-PRINCIPLES.md`](PRODUCT-PRINCIPLES.md) says what the app is for.
+
+The conventions, build order and framework rules live in `AGENTS.md` and `.agents/skills/webjs/`. `bun install` also points git at `.hooks/`, whose pre-commit hook refuses a commit on `main`.
