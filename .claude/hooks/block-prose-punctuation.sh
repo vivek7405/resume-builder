@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# PreToolUse hook: block prose-punctuation patterns the webjs convention bans.
+# PreToolUse hook: block prose-punctuation patterns this repo bans.
 #
 # Catches four classes of new content in tool calls:
 #
@@ -17,7 +17,7 @@
 #        - `<my-tag>:` (custom-element tag with hyphen)
 #        - Inline comment `// foo(): description`
 #
-# Why this exists: see AGENTS.md "Invariants", item 11. These patterns
+# Why this exists: see .agents/rules/workflow.md, "Git rules". These patterns
 # confuse AI agents that try to parse the prose as TypeScript / shorthand-
 # method / object-literal syntax, and trip humans reading API docs.
 #
@@ -58,13 +58,13 @@ if grep -q $'\xe2\x80\x94' <<< "$new_content"; then
   cat >&2 <<'EOF'
 BLOCKED: em-dash (U+2014) detected in this tool call.
 
-webjs bans em-dashes repo-wide. Replace every U+2014 character with
+This repo bans em-dashes. Replace every U+2014 character with
 a period, comma, colon (on a plain-noun LHS), parentheses, or
 restructured sentence. Do NOT replace it with " - " or " ; " or a
 trailing colon on code: those are also banned. See rule 2 / 3 / 4
 below for the alternatives.
 
-Rule: AGENTS.md, Invariants section, item 11.
+Rule: .agents/rules/workflow.md, "Git rules".
 Hook: .claude/hooks/block-prose-punctuation.sh.
 EOF
   exit 2
@@ -121,8 +121,8 @@ fi
 
 # YAML front-matter " - " pause, same three keys. Anchored at column 0 with no
 # leading whitespace, which is what confines it to document front matter: every
-# nested YAML mapping is indented, including the workflow-input `description:`
-# values in .github/workflows/release.yml.
+# nested YAML mapping is indented, which keeps it off a workflow file's
+# `description:` values.
 if grep -qE '^(description|title|displayName):[[:space:]].*[A-Za-z`)>][[:space:]]-[[:space:]][A-Za-z`(<]' <<< "$new_content"; then
   block_pause_hyphen=1
 fi
@@ -131,7 +131,7 @@ if [ "$block_pause_hyphen" = "1" ]; then
   cat >&2 <<'EOF'
 BLOCKED: pause-hyphen " - " detected in a prose context.
 
-webjs bans plain hyphens used as pause-punctuation in prose. Rewrite
+This repo bans plain hyphens used as pause-punctuation in prose. Rewrite
 the sentence with a period, comma, colon (on a plain-noun LHS), or
 restructured phrasing.
 
@@ -152,7 +152,7 @@ flags (`--http2`), filenames, ranges, and math expressions in code
 markdown headings, blockquotes, HTML prose tags, and a JSON or
 front-matter description / title / displayName value).
 
-Rule: AGENTS.md, Invariants section, item 11.
+Rule: .agents/rules/workflow.md, "Git rules".
 Hook: .claude/hooks/block-prose-punctuation.sh.
 EOF
   exit 2
@@ -192,7 +192,7 @@ if [ "$block_pause_semicolon" = "1" ]; then
   cat >&2 <<'EOF'
 BLOCKED: pause-semicolon " ; " detected in a prose context.
 
-webjs bans semicolons used as pause-punctuation in prose. Rewrite as
+This repo bans semicolons used as pause-punctuation in prose. Rewrite as
 two sentences (period) or with a conjunction (", and", ", but", ", so").
 
   Bad:  // Forms work ; links work too.
@@ -206,7 +206,7 @@ Semicolons stay fine inside code (JS statement terminators, CSS
 declarations) since those are not flagged. Only the space-surrounded
 form is banned, so an ordinary English semicolon is untouched.
 
-Rule: AGENTS.md, Invariants section, item 11.
+Rule: .agents/rules/workflow.md, "Git rules".
 Hook: .claude/hooks/block-prose-punctuation.sh.
 EOF
   exit 2
@@ -221,14 +221,14 @@ if grep -qE '\)</code>:[[:space:]][a-z]' <<< "$new_content"; then
   cat >&2 <<'EOF'
 BLOCKED: code-LHS colon-then-prose detected ("<code>foo()</code>: ...").
 
-webjs bans `<code>foo()</code>: <prose>` because the colon visually
+This repo bans `<code>foo()</code>: <prose>` because the colon visually
 parses as a TypeScript return-type annotation. Rewrite verb-led.
 
   Bad:  <code>repeat()</code>: keyed list directive
   Good: <code>repeat()</code> is the keyed list directive
   Good: <code>startServer()</code> creates an HTTP(S) server
 
-Rule: AGENTS.md, Invariants section, item 11.
+Rule: .agents/rules/workflow.md, "Git rules".
 Hook: .claude/hooks/block-prose-punctuation.sh.
 EOF
   exit 2
@@ -241,14 +241,14 @@ if grep -qE '<[a-z][a-z0-9]*(-[a-z0-9]+)+([[:space:]][^>]*)?>:[[:space:]][a-z]' 
   cat >&2 <<'EOF'
 BLOCKED: custom-element-tag colon-then-prose detected ("<my-tag>: ...").
 
-webjs bans `<my-tag>: <prose>` in comments and docs. Rewrite verb-led.
+This repo bans `<my-tag>: <prose>` in comments and docs. Rewrite verb-led.
 
   Bad:  // <ui-dialog>: owns open state, focus trap, escape, scroll lock.
   Good: // <ui-dialog> owns open state, focus trap, escape, scroll lock.
   Bad:  // <ui-dialog-content>: the centered panel.
   Good: // <ui-dialog-content> is the centered panel.
 
-Rule: AGENTS.md, Invariants section, item 11.
+Rule: .agents/rules/workflow.md, "Git rules".
 Hook: .claude/hooks/block-prose-punctuation.sh.
 EOF
   exit 2
@@ -262,14 +262,14 @@ if grep -qE '^[[:space:]]*(//|\*)[[:space:]][^(]*[A-Za-z_][A-Za-z0-9_]*\([^)]*\)
   cat >&2 <<'EOF'
 BLOCKED: comment-line code-LHS colon-then-prose detected ("// foo(): ...").
 
-webjs bans `xyz(): <prose>` inside comments and JSDoc. Rewrite verb-led.
+This repo bans `xyz(): <prose>` inside comments and JSDoc. Rewrite verb-led.
 
   Bad:  // firstUpdated(): once, on the first render only
   Good: // firstUpdated() runs once, on the first render only
   Bad:  // closest(): null if the click wasn't inside a frame
   Good: // closest() returns null when the click wasn't inside a frame
 
-Rule: AGENTS.md, Invariants section, item 11.
+Rule: .agents/rules/workflow.md, "Git rules".
 Hook: .claude/hooks/block-prose-punctuation.sh.
 EOF
   exit 2

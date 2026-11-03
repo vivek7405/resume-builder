@@ -5,7 +5,7 @@
 # After a `gh pr merge`, sweep the repo's git worktrees and REMOVE the ones
 # whose work has already landed, so a merged branch's worktree does not leak.
 # Accumulated stale worktrees (a session that merged but never cleaned up, or
-# crashed mid-task) are exactly what this closes: the webjs-start-work skill
+# crashed mid-task) are exactly what this closes: the start-work skill
 # already says "after the PR merges, git worktree remove", but as guidance it
 # gets skipped, so this makes the cleanup deterministic.
 #
@@ -23,7 +23,7 @@
 # model via hookSpecificOutput.additionalContext. Disable with
 # WEBJS_NO_WORKTREE_CLEANUP=1.
 #
-# Rule: AGENTS.md "One task per git worktree" + the webjs-start-work skill.
+# Rule: AGENTS.md "One task per git worktree" + the start-work skill.
 
 set -uo pipefail
 
