@@ -58,16 +58,16 @@ jobs:
           bun-version: latest
       - run: bun install
       - name: Install Playwright Chromium
-        if: matrix.check == 'Tests: browser' || matrix.check == 'Tests: e2e'
+        if: "matrix.check == 'Tests: browser' || matrix.check == 'Tests: e2e'"
         run: bunx playwright install --with-deps chromium
       # The e2e tests drive a real browser via puppeteer-core, which is not a
       # default dependency (they skip when it is absent). Install it so the e2e
       # check runs here rather than skipping silently.
       - name: Install puppeteer-core
-        if: matrix.check == 'Tests: e2e'
+        if: "matrix.check == 'Tests: e2e'"
         run: bun add --no-save puppeteer-core
       - name: Resolve the Chromium binary path
-        if: matrix.check == 'Tests: browser' || matrix.check == 'Tests: e2e'
+        if: "matrix.check == 'Tests: browser' || matrix.check == 'Tests: e2e'"
         run: echo "CHROMIUM_PATH=$(node -e "console.log(require('playwright-core').chromium.executablePath())")" >> "$GITHUB_ENV"
       - name: Set up the database (generate + apply migrations)
         run: bun run db:generate && bun run db:migrate
