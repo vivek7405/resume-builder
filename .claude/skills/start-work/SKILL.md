@@ -7,6 +7,8 @@ when_to_use: |
     "start work on issue 12"
     "pick up #12"
     "let's work on the export issue"
+    "merge #13"
+    "merge the PR and delete the branch"
   Also use right after file-issue, before writing code for new work that had no issue. The standing rule is no code before a tracked issue and a branch cut for it.
   Do NOT trigger for: listing what is open (list-todos), or filing a new issue (file-issue).
 ---
@@ -127,19 +129,29 @@ Then run `gh pr ready <N>` and hand it to the owner. There is no review cycle to
      --input <scratch>/reply.json
    ```
 
-3. **Resolve the thread** once its finding is fixed. Leave a debated or won't-fix thread open for the owner to resolve, since the concern is theirs. Threads resolve only through GraphQL:
-
-   ```sh
-   gh api graphql -f query='query{repository(owner:"vivek7405",name:"resume-builder"){pullRequest(number:<N>){reviewThreads(first:50){nodes{id isResolved}}}}}' \
-     --jq '.data.repository.pullRequest.reviewThreads.nodes[] | select(.isResolved==false) | .id'
-   gh api graphql -f query='mutation($t:ID!){resolveReviewThread(input:{threadId:$t}){thread{isResolved}}}' -f t=<thread id>
-   ```
+3. **Resolve the thread** once its finding is fixed, or once the owner has decided not to fix it and your reply records that. A thread stays open only while the owner has not decided. Threads resolve only through GraphQL, with the commands under "Merging".
 
 ## Merging
 
 Merge only when the user explicitly says to, and ask whether to delete the branch if they did not say. Branch protection on `main` requires seven checks, admins included, and no review: `Conventions`, `Health`, `Types`, `Security: dependency audit`, `Tests: server`, `Tests: browser`, `Tests: e2e`. A red check is read and fixed, or reported. It is never bypassed.
 
-Run these from the primary checkout, with the full head SHA, since the guard refuses a short one:
+**Close out every review thread first.** A merge instruction does not mean the threads can stay open, and GitHub will not stop you, because `main` does not require it. List what is unresolved, including threads from a `/code-review --comment` run:
+
+```sh
+gh api graphql -f query='query{repository(owner:"vivek7405",name:"resume-builder"){pullRequest(number:<N>){reviewThreads(first:50){nodes{id isResolved path line comments(first:1){nodes{databaseId body}}}}}}}' \
+  --jq '.data.repository.pullRequest.reviewThreads.nodes[] | select(.isResolved==false)'
+```
+
+For each one, reply with what was decided and why, including when the owner said not to fix it, then resolve it:
+
+```sh
+gh api -X POST repos/vivek7405/resume-builder/pulls/<N>/comments/<comment_id>/replies --input <scratch>/reply.json
+gh api graphql -f query='mutation($t:ID!){resolveReviewThread(input:{threadId:$t}){thread{isResolved}}}' -f t=<thread id>
+```
+
+If the owner has not decided on a finding, ask, and hold the merge until they do.
+
+Then run these from the primary checkout, with the full head SHA, since the guard refuses a short one:
 
 ```sh
 gh pr merge <N> --merge --match-head-commit <full sha>
