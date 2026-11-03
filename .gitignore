@@ -60,12 +60,15 @@ Thumbs.db
 coverage/
 
 # AI assistants: local session state, scheduled-task locks, etc.
-# Repo-shared config (settings.json + hooks scripts) stays tracked so
-# every contributor and agent gets the same PreToolUse rules.
+# Repo-shared config (settings.json, hooks, skills, board ids) stays tracked so
+# every contributor and agent gets the same rules and workflow.
 .claude/*
 !.claude/settings.json
 !.claude/hooks/
 !.claude/hooks/**
+!.claude/skills/
+!.claude/skills/**
+!.claude/gh-ids.env
 
 # SQLite dev database
 db/dev.db

@@ -20,11 +20,14 @@ and the browser check for a UI app.
 1. Check `git branch --show-current`. If on main or master, create a feature
    branch before editing. If on a feature branch, verify it matches the task.
 2. Sync: `git fetch origin` and `git rebase origin/main` if behind.
-3. If more than one agent may work this repo at once, use a DEDICATED git worktree
-   per task (`git worktree add -b <branch> ../<repo>-<slug> origin/main`, work
-   there, `git worktree remove` after merge), never a shared checkout. Two agents
-   in one directory collide: a `git checkout` in one moves HEAD under the other,
-   so commits land on the wrong branch.
+3. Use a DEDICATED git worktree per task (`git worktree add -b <branch>
+   ../<repo>-<slug> origin/main`, work there, `git worktree remove` after merge),
+   never a shared checkout. Two agents in one directory collide: a `git checkout`
+   in one moves HEAD under the other, so commits land on the wrong branch.
+4. Work is tracked on the Resume Builder board. New work starts with the
+   `file-issue` skill, and any issue starts with the `start-work` skill, which
+   also carries the definition of done and the merge steps. `AGENTS.md`, "Project
+   skills", lists them all.
 
 ## Every code change
 
@@ -67,7 +70,11 @@ team already does. WebJs has opinions about the code (the conventions above,
 - Never add Co-Authored-By or AI-attribution trailers.
 - Never use an em-dash (U+2014), a space-surrounded hyphen as a pause, or a
   space-surrounded semicolon as a pause, in commit messages or anywhere. Use a
-  period, comma, colon, parentheses, or a restructured phrasing.
+  period, comma, colon, parentheses, or a restructured phrasing. Do not follow a
+  code-shaped left-hand side with a colon and prose (`foo(): does a thing`, or a
+  custom-element tag used the same way), because it reads as a type annotation.
+  Write it verb-led instead. `.claude/hooks/block-prose-punctuation.sh` enforces
+  all of this.
 - Work on feature branches, never push directly to main. Open pull requests for
   review. Never merge without explicit user permission (ask which target, and
   whether to delete or keep the branch, then wait for both answers).

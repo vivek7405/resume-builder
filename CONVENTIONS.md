@@ -16,3 +16,5 @@ only says where each rule lives, so no rule is stated twice.
 - **Server boundary, progressive enhancement, typing**: the skill's "What WebJs
   Is", "Core WebJs Rules", and "Default Workflow".
 - **Git, tests, and CI (GitHub Actions)**: `.agents/rules/workflow.md`.
+- **Workflow skills** (filing issues, starting work, docs): `AGENTS.md`, "Project
+  skills", with the skills themselves in `.claude/skills/`.
