@@ -80,8 +80,26 @@ If several match, ask which one.
 ## While working
 
 - Commit per logical unit and push after each commit. Imperative subject under 72 characters, a body that gives the reason, and no AI attribution.
-- Put a decision the diff does not explain on the PR as a comment when it happens: an alternative rejected, a tradeoff accepted, a constraint discovered. Keep session mechanics (retries, tool errors) off the PR.
+- Post context comments on the PR as the work happens. See the next section.
 - CI is GitHub Actions. Run only the check you are working on locally, by its title in `webjs.ci`: `bun run ci -- --only "Tests: server"`. The PR runs the rest, and `gh pr checks` shows the result.
+
+## Context comments on the PR
+
+A complete PR carries three things: a meaningful title, a body that says what changed and why, and context comments. The PR is the durable memory a future agent or the owner consults. The diff shows what changed, and the reasoning is lost with the chat unless it is written onto the PR.
+
+**Post them automatically, as the discussion happens.** Nobody has to ask. Whenever the work or a conversation about it produces something the diff does not explain, post it then: why an approach won over a credible alternative, an experiment tried and reverted, a tradeoff accepted knowingly, a constraint discovered mid-work, something deliberately deferred, a review finding resolved a particular way. This runs across the PR's whole life, so do not save it for one dump at the end.
+
+```sh
+gh pr comment <N> --body-file <scratch>/pr-comment.md
+```
+
+Use an inline review comment instead when the reasoning belongs to specific lines.
+
+**The test.** Someone who opens only this PR, with no access to the chat, should find every non-obvious "why" already written there. If reconstructing the reasoning would take the chat transcript, a comment is missing. Skip what the diff already makes obvious, and do not repeat the PR body.
+
+**The shape.** Start each standalone comment with a short bold heading that names its kind and subject, such as `**Decision: kept SQLite over Postgres for the volume**`, so the comment list can be scanned. Replies inside a review thread need no heading. Write in the owner's voice: first person, plain, no AI or agent framing. Link commits as [`5fd02dc`](https://github.com/vivek7405/resume-builder/commit/5fd02dc), because GitHub does not link a SHA inside a code span. Keep to the prose rule in `.agents/rules/workflow.md`.
+
+**What stays off the PR.** A PR holds the code change and its review, nothing about the session that produced them. Leave out a subagent that failed, a tool error, a retry, an interruption, how long something took, and your own process mistakes. CI results and test counts belong in the body's test plan, not in comments. The test: would this still matter to someone reading the PR in a year? A rejected alternative passes. "I got this wrong earlier and then corrected it" does not, since the diff already shows the correction.
 
 ## Definition of done
 
@@ -90,7 +108,8 @@ The gate for `gh pr ready <N>`. For each item, do it or write "N/A because <reas
 1. **Tests at every layer the change can affect.** Server in `test/<feature>/*.test.ts`, browser in `test/<feature>/browser/*.test.js`, e2e in `test/<feature>/e2e/`. A unit test passing does not prove client behaviour. Show the new test can fail: commit the fix and the test first, break the source, watch it go red, then restore it.
 2. **Docs on the same PR.** Use `doc-sync`. Note that `app/(app)/architecture/` describes the code and has to move with it.
 3. **The browser, for UI work.** Boot `bun --bun run dev`, open every changed route, and play through its states. `check` and `typecheck` pass even when a layout collapses.
-4. **All seven checks green on the pushed head.**
+4. **Context comments.** Every non-obvious "why" is on the PR, by the test in the section above. The last thing to check before going ready, since a PR with no comments and real decisions in it is incomplete.
+5. **All seven checks green on the pushed head.**
 
 Then run `gh pr ready <N>` and hand it to the owner. There is no review cycle to run: no reviewer subagents and no self-authored review objects. The owner reviews every PR.
 
