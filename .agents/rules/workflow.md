@@ -67,6 +67,9 @@ team already does. WebJs has opinions about the code (the conventions above,
 - If you have 5 or more unstaged files spanning different concerns, commit before
   continuing.
 - Meaningful commit messages: what changed and why.
+- Before a merge, every review thread is resolved, with a reply recording the
+  decision, including a finding the owner chose not to fix. An undecided thread
+  holds the merge. `start-work` has the commands.
 - Never add Co-Authored-By or AI-attribution trailers.
 - Never use an em-dash (U+2014), a space-surrounded hyphen as a pause, or a
   space-surrounded semicolon as a pause, in commit messages or anywhere. Use a
