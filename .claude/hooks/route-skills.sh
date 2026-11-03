@@ -50,6 +50,10 @@ if has '\b(work on|start on|start work on|begin work on|pick up|tackle|start|beg
   add_match "start-work: this begins a tracked issue. Invoke the start-work skill before making changes."
 fi
 
+if has '\bmerge (it|this|that|the pr|this pr|that pr|the pull request|pr( #?[0-9]+)?|#?[0-9]+)\b'; then
+  add_match "start-work: this merges a pull request. Follow the Merging section of the start-work skill: close out every review thread first, merge with the full head SHA, then check the card and the deploy."
+fi
+
 if has '\bplan (issue )?#[0-9]+' \
    || has '\bplan (this|that|the) issue\b' \
    || has '\bready for (dev|development|implementation)\b' \

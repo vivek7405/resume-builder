@@ -7,6 +7,8 @@ when_to_use: |
     "start work on issue 12"
     "pick up #12"
     "let's work on the export issue"
+    "merge #13"
+    "merge the PR and delete the branch"
   Also use right after file-issue, before writing code for new work that had no issue. The standing rule is no code before a tracked issue and a branch cut for it.
   Do NOT trigger for: listing what is open (list-todos), or filing a new issue (file-issue).
 ---

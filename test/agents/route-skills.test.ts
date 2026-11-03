@@ -40,6 +40,12 @@ const ROUTED: [string, string][] = [
   ['pick up #12', 'start-work'],
   ['start work on the rate limit', 'start-work'],
   ["let's work on the export issue", 'start-work'],
+  ['merge it', 'start-work'],
+  ['merge 13', 'start-work'],
+  ['merge #13', 'start-work'],
+  ['Merge PR, and delete branch', 'start-work'],
+  ['merge the PR and delete the branch', 'start-work'],
+  ['can you merge this pr', 'start-work'],
   ['plan #12', 'plan-issue'],
   ['plan this issue', 'plan-issue'],
   ['get #12 ready for development', 'plan-issue'],
@@ -84,6 +90,11 @@ const UNROUTED = [
   'what does this function return',
   'Is there a mandatory review required for merging the PR?',
   'the docs folder is large',
+  'the merge conflict is gone',
+  'a merge to main deploys',
+  'is this ready to merge',
+  'merge sort is faster here',
+  'the merged pr is on main',
   'what is the plan for #12',
   'the plan issue came up again',
   'the code review passed',
@@ -112,6 +123,11 @@ test('routed output tells the model the repo skill wins over a webjs one', () =>
   assert.doesNotMatch(unrouted, /webjs-\*/);
 });
 
+test('a merge prompt is told to close out review threads first', () => {
+  const context = JSON.parse(route('merge the PR').stdout).hookSpecificOutput.additionalContext;
+  assert.match(context, /close out every review thread first/);
+});
+
 test('the router ignores a payload with no prompt', () => {
   const run = spawnSync('bash', [ROUTER], { input: '{}', encoding: 'utf8' });
   assert.deepEqual([run.status, run.stdout], [0, '']);
@@ -128,7 +144,7 @@ test('settings.json wires the router on UserPromptSubmit, and it is executable',
 
 test('every skill the router names exists, and every repo skill is routed', () => {
   const named = [...readFileSync(ROUTER, 'utf8').matchAll(/add_match "([a-z-]+):/g)].map((match) => match[1]);
-  assert.deepEqual(named.sort(), [...SKILLS, ...EXTERNAL].sort());
+  assert.deepEqual([...new Set(named)].sort(), [...SKILLS, ...EXTERNAL].sort());
   assert.deepEqual(readdirSync(SKILLS_DIR).sort(), [...SKILLS].sort());
 });
 
