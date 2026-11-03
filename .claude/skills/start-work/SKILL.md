@@ -17,7 +17,7 @@ when_to_use: |
 
 If there is no issue for this work, stop, run `file-issue`, then come back with the number. Untracked work never shows on the board and its PR closes nothing.
 
-If the user described the issue by topic, resolve the number:
+When unsure whether one exists, search, and when still in doubt, file it, since a duplicate is cheap to close and untracked work is not. If the user described the issue by topic, resolve the number:
 
 ```sh
 gh api "search/issues?q=repo:vivek7405/resume-builder+is:issue+is:open+<topic>&per_page=20" \
@@ -105,13 +105,35 @@ Use an inline review comment instead when the reasoning belongs to specific line
 
 The gate for `gh pr ready <N>`. For each item, do it or write "N/A because <reason>" in the PR body.
 
-1. **Tests at every layer the change can affect.** Server in `test/<feature>/*.test.ts`, browser in `test/<feature>/browser/*.test.js`, e2e in `test/<feature>/e2e/`. A unit test passing does not prove client behaviour. Show the new test can fail: commit the fix and the test first, break the source, watch it go red, then restore it.
+1. **Tests at every layer the change can affect.** Server in `test/<feature>/*.test.ts`, browser in `test/<feature>/browser/*.test.js`, e2e in `test/<feature>/e2e/`. A unit test passing does not prove client behaviour. Show the new test can fail: commit the fix and the test first, break the source, watch it go red, then restore it. Commit first because `git checkout <file>` on an uncommitted fix throws the fix away with the breakage. Break the source with an edit rather than `sed`, since shell-quoted escapes can leave control bytes in the file. If a later commit touches the same mechanism, run it again, because a test that failed for an older commit may no longer catch anything.
 2. **Docs on the same PR.** Use `doc-sync`. Note that `app/(app)/architecture/` describes the code and has to move with it.
 3. **The browser, for UI work.** Boot `bun --bun run dev`, open every changed route, and play through its states. `check` and `typecheck` pass even when a layout collapses.
 4. **Context comments.** Every non-obvious "why" is on the PR, by the test in the section above. The last thing to check before going ready, since a PR with no comments and real decisions in it is incomplete.
 5. **All seven checks green on the pushed head.**
 
 Then run `gh pr ready <N>` and hand it to the owner. There is no review cycle to run: no reviewer subagents and no self-authored review objects. The owner reviews every PR.
+
+## Review
+
+**If the owner asks you to review a PR,** do it yourself, inline in the session, with the `pr-review` skill: one read over the whole diff, posted as one review object. Never hand it to a subagent or expand it into rounds. A plain review ask stops at the findings. If the ask says to fix them, apply the fixes, and if it also asks for comments, do both.
+
+**When the owner leaves review comments,** work through each one:
+
+1. **Fix it** on the branch, then commit and push. Or make the case in the thread for leaving it as is, and let the owner decide.
+2. **Reply in the comment's thread** with the resolution, in the voice described under "Context comments on the PR". Build the payload with `jq --rawfile`.
+
+   ```sh
+   gh api -X POST repos/vivek7405/resume-builder/pulls/<N>/comments/<comment_id>/replies \
+     --input <scratch>/reply.json
+   ```
+
+3. **Resolve the thread** once its finding is fixed. Leave a debated or won't-fix thread open for the owner to resolve, since the concern is theirs. Threads resolve only through GraphQL:
+
+   ```sh
+   gh api graphql -f query='query{repository(owner:"vivek7405",name:"resume-builder"){pullRequest(number:<N>){reviewThreads(first:50){nodes{id isResolved}}}}}' \
+     --jq '.data.repository.pullRequest.reviewThreads.nodes[] | select(.isResolved==false) | .id'
+   gh api graphql -f query='mutation($t:ID!){resolveReviewThread(input:{threadId:$t}){thread{isResolved}}}' -f t=<thread id>
+   ```
 
 ## Merging
 
@@ -161,4 +183,5 @@ This repo uses merge commits. Delete the branch as its own step, because `--dele
 
 - A dirty task worktree at the start means a prior session stopped mid-work. Ask before touching it. A dirty primary checkout is not a blocker, because the worktree cuts from `origin/main`.
 - A commit that landed on the wrong branch means something moved HEAD. Confirm with `git branch --show-current` before every commit.
+- If the task worktree's HEAD is detached or off its branch and work seems gone, do not redo it or force-push. Every unit was pushed, so the branch still has it. Run `git -C <worktree> checkout <branch>`, then confirm with `git log --oneline origin/main..HEAD` and a clean `git status`.
 - If the card move fails, report it and continue. The branch still stands.
