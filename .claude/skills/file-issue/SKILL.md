@@ -14,6 +14,8 @@ when_to_use: |
 
 Work on this repo is tracked as GitHub issues on `vivek7405/resume-builder`, shown on the board at https://github.com/users/vivek7405/projects/15.
 
+**A bug or gap in WebJs itself goes on the framework's board, not this one.** This app is built on the framework, so building it can turn up problems that are not the app's. File those with `webjs-file-issue` and a `dogfood:` title prefix, and say which board it went to when you report. If the app needs its own workaround, that part gets an issue here.
+
 ## Inputs
 
 From the user's description, take:
@@ -35,7 +37,7 @@ If the description is very thin, ask one question first: scope it now, or file a
 
    If one matches, ask whether to file anyway or use it.
 
-2. **Ground the body in the code.** The implementer may be an agent with no access to this conversation, so the body is the whole brief. Before filing, open the code and collect real paths, the landmines (prior incidents, non-obvious constraints), the invariants the change must keep, and the test layers and doc surfaces it touches. Paths recalled from memory are the ones that turn out stale, so grep them.
+2. **Ground the body in the code.** Assume the implementer is an agent with no access to this conversation, so the body is the whole brief. Before filing, open the code and collect real paths, the landmines (prior incidents, non-obvious constraints), the invariants the change must keep, and the test layers and doc surfaces it touches. Paths recalled from memory are the ones that turn out stale, so grep them. An issue spanning several areas can fan this out: one read-only `Explore` agent per concern, in a single message, with the writing left to you.
 
    Then reread the draft as if you had never seen this conversation. If you could not start from it without a question, or without first hunting for the code, it is not ready. Naming an area ("the editor") instead of a path is the usual failure.
 

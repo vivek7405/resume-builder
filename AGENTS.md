@@ -170,8 +170,10 @@ Workflow skills for this repo live in `.claude/skills/`, and
 
 The `webjs-*` skills do not apply in this repo, even when a global hook names
 them. They target the webjs framework repo and its board, so use the skill above
-in their place. `use-railway` does not apply either: deployment here is pilots,
-through the `pilots` skill. The `.agents/skills/webjs/` skill is different and
+in their place. The one exception is a bug or gap in WebJs itself found while
+building here: file that on the framework's board with `webjs-file-issue` and a
+`dogfood:` title prefix. `use-railway` does not apply either: deployment here is
+pilots, through the `pilots` skill. Code review uses the `pr-review` skill. The `.agents/skills/webjs/` skill is different and
 stays in force, because it teaches how to build with the framework.
 
 ## Type everything (all templates)
