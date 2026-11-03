@@ -4,9 +4,11 @@ name: CI
 # every PR into main and every push to main. A push is all it takes to run it,
 # so nothing has to pass on a developer machine first.
 #
-# One job per check, so each one is its own status on the PR and can be required
-# on its own in the branch-protection rule for main. fail-fast is off so one red
-# check does not hide the others.
+# One job per check, so each one is its own status on the PR. The branch-protection
+# rule for main requires every one of them by job name, admins included, so a red
+# check blocks the merge. A new check has to be added to that rule too, and renaming
+# one means updating the rule, or merges wait forever on a name that never reports.
+# fail-fast is off so one red check does not hide the others.
 #
 # Each job runs one entry of the step list in package.json, under
 # "webjs": { "ci": { "steps": [...] } }, by its title. A check added there has to

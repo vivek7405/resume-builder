@@ -25,7 +25,7 @@ bun --bun run dev                            # http://localhost:8080
 
 ## Verify
 
-[GitHub Actions](.github/workflows/ci.yml) runs every check on each pull request and each push to `main`, one job per check: conventions, health, types, the dependency audit, and the server, browser and e2e tests. Nothing has to pass locally before a push.
+[GitHub Actions](.github/workflows/ci.yml) runs every check on each pull request and each push to `main`, one job per check: conventions, health, types, the dependency audit, and the server, browser and e2e tests. `main` requires all of them, so a red check blocks the merge. Nothing has to pass locally before a push.
 
 ```sh
 gh pr checks                            # the result for this branch's pull request

@@ -35,13 +35,16 @@ and the browser check for a UI app.
 4. CI runs in GitHub Actions. `.github/workflows/ci.yml` runs on every PR and
    every push to main, one job per check: `webjs check` (correctness),
    `webjs doctor` (project health), `webjs typecheck`, a dependency audit, then
-   the server, browser, and e2e test layers. Push and read the result with
-   `gh pr checks`. A full local run is not required before a push, which
+   the server, browser, and e2e test layers. Branch protection on main requires
+   all of them, admins included, so a red check blocks the merge. Push and read
+   the result with `gh pr checks`. A full local run is not required before a push, which
    overrides the skill's "before every push" line. While you iterate, run only
    the check you are working on: `bun run ci -- --only "Tests: server"`, by its
    title in the `webjs.ci` list in `package.json`. A check added to that list
    also needs an entry in the workflow's matrix, and
-   `test/ci/ci-workflow.test.ts` fails until it has one. Doctor fails on whatever your
+   `test/ci/ci-workflow.test.ts` fails until it has one, and it should be added to
+   the required checks on main as well. Renaming a check means updating those
+   required checks, or merges wait on a name that never reports. Doctor fails on whatever your
    `package.json` `webjs.doctor.gate` marks `error`, which starts as the
    un-versioned stylesheet link check, plus the two hard toolchain checks that
    default to `error` with no gate entry at all: `NODE_VERSION` (the Node
