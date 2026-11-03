@@ -105,7 +105,7 @@ A checkbox list of observable results.
 
 Check for overlap first, in a line or two: which files does each touch? Plan overlapping issues one after another, and name the shared file in both plans. If one depends on another's output, plan the first and tell the user the second is queued, since a plan against code about to change is stale when it lands.
 
-Plan a small batch inline, one after another. Use background agents only for a larger batch of unrelated issues: one per issue, in a single message. Give each this brief, with its issue number filled in:
+Plan a small batch inline, one after another. Use background agents only for a larger batch of unrelated issues: one per issue, in a single message, without worktree isolation, because a fresh worktree has no dependencies for running a repro. Give each this brief, with its issue number filled in:
 
 > Plan issue #N in the resume-builder repo by following `.claude/skills/plan-issue/SKILL.md`, including its limits on time. Work alone and settle every call yourself, listing what you cannot settle under Assumptions. You share this checkout with other agents, so do not edit any repo file, run a git command that changes state, or install anything. Scratch files go outside the repo. Your only changes are this issue's body and its card. Do not open a PR, comment, file an issue, or change labels. Report your decisions and assumptions.
 

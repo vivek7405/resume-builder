@@ -21,16 +21,16 @@ The board at https://github.com/users/vivek7405/projects/15 is the source of tru
 
    ```sh
    gh project item-list 15 --owner vivek7405 --format json --limit 1000 \
-     --jq '.items[] | [.status, .content.number, .title] | @tsv'
+     --jq '.items[] | [.status, .content.number, .title, .content.url] | @tsv'
    ```
 
-   Pass `--limit`, because the default page is 30 and a larger board would silently truncate.
+   Pass `--limit`, because the default page is 30 and a larger board would silently truncate. A follow-up about one card does not need a second fetch of the board.
 
 2. **Bucket by Status:** Todo, Planned, In Progress, Done. A card with no status goes in its own "No status" bucket, so it does not disappear.
 
 3. **Show** Todo, Planned, In Progress, and any No status cards. Show Done only if the user asks for it or if everything else is empty. If the user asked for one bucket, show that one.
 
-4. **For each item,** show `#<number>  <title>`.
+4. **For each item,** show `#<number>  <title>`, with the number as a markdown link to the issue so it can be clicked.
 
 ```
 Todo:

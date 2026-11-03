@@ -46,6 +46,8 @@ Settings that live outside the repo need recording here too: the required checks
 
 ## Per-change sync
 
+A change touching many surfaces can fan the reads out: one read-only `Explore` agent per surface, in a single message, each answering whether that surface still tells the truth. The edits stay in the main session. A change touching one or two surfaces needs none of this.
+
 1. Pick the change's identifying tokens: a route, a file name, a command, a config key, a feature phrase.
 2. Grep them across the surfaces.
 
