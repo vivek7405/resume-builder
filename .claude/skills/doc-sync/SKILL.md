@@ -22,7 +22,7 @@ For any change, decide per surface whether it applies, then update it or write "
 2. **`AGENTS.md`**: the build playbook and the commands. It is the first thing an agent reads.
 3. **`.agents/rules/workflow.md`**: git, tests, CI, and merge rules.
 4. **`CONVENTIONS.md`**: only says where each rule lives, so it changes when a rule moves.
-5. **`ARCHITECTURE.md`**: the design in writing, and what enforces each rule. `test/agents/docs.test.ts` fails on a cited path that no longer exists.
+5. **`ARCHITECTURE.md`**: the rules that hold the app together, and what enforces each one. The design itself is on the architecture pages below. `test/agents/docs.test.ts` fails on a cited path that no longer exists.
 6. **`PRODUCT-PRINCIPLES.md`**: what the product is for. Changing it is the owner's decision, so raise it rather than editing it to fit a change.
 7. **`app/(app)/architecture/page.ts` and `app/(app)/architecture/internals/page.ts`**: the published description of how the app works. These rot when code moves, and `test/architecture/architecture.test.ts` fails on a cited file that no longer exists.
 8. **`.github/pull_request_template.md`** and the header of **`.github/workflows/ci.yml`**: the PR gate and how CI is run.
