@@ -20,7 +20,7 @@ Planning is not the work, so it stays small. Aim for a few minutes per issue.
 
 - **Read only what the change touches:** the issue, its comments, and the files it will edit. Follow one reference further if a step depends on it. No survey of the repo, and no sweep of other projects.
 - **One pass, inline.** Write the plan once and post it. No subagent for a single issue, no review round, no polishing.
-- **Decide, do not research.** Pick what fits the repo's conventions and give the reason in one line. A choice that is cheap to change later needs no investigation.
+- **Decide, do not research.** Pick what fits `ARCHITECTURE.md` and `PRODUCT-PRINCIPLES.md`, and give the reason in one line. If the issue would break a principle, say so when you report. A choice that is cheap to change later needs no investigation.
 - **Do not stop on an unknown.** If a quick look does not settle something, take the safer default and list it under Assumptions for the implementer to check. Name any that the user should weigh in on when you report.
 - **Match the size of the change.** A small fix gets a few lines. If a section has nothing to say, say so in one line.
 - **Stop when the test passes,** even if more could be said. If you have spent much longer than expected, post what you have with the open points under Assumptions.

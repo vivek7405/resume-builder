@@ -11,17 +11,20 @@ that muscle memory produces broken WebJs code. Before you write or change
 anything, gather context from these sources. Do not skip a step to save time.
 This is what separates a working app from a broken one.
 
-1. **Read the skill.** Start with `.agents/skills/webjs/SKILL.md`, then load the
+1. **Read what this app is.** `PRODUCT-PRINCIPLES.md` says what Folio is for and
+   what it leaves out on purpose, and `ARCHITECTURE.md` says how it holds together.
+   If a change would break either, say so before building it.
+2. **Read the skill.** Start with `.agents/skills/webjs/SKILL.md`, then load the
    `references/*.md` files it routes to for the surface you are touching. The
    skill is the guide to building a WebJs app: it helps you choose the right
    layer, reach for the right export, and avoid the mistakes Next.js or Lit
    habits cause. Reading it is never wasted work: it survives the
    gallery-clearing step in the playbook below.
-2. **Study the shipped examples, then build on a clean slate.** The template
+3. **Study the shipped examples, then build on a clean slate.** The template
    playbook below says what ships and the exact order to follow. The workflow
    rules (git, tests, review) are in `.agents/rules/workflow.md`; follow them
    too.
-3. **Read the framework source for exact contracts.** WebJs is 100% buildless
+4. **Read the framework source for exact contracts.** WebJs is 100% buildless
    native ES modules, so the source you run IS the source you read. For one
    export's signature and doc comment run `bunx webjs source <Export>` (for
    example `bunx webjs source createAuth`); it reads the installed package and
@@ -158,13 +161,15 @@ bun run db:generate && bun run db:migrate
 
 ## Project skills
 
-Workflow skills for this repo live in `.claude/skills/`, and
-`.claude/hooks/route-skills.sh` points a prompt at the one it asks for:
+Workflow skills for this repo live in `.claude/skills/`, linked at `.agents/skills/`
+for other agents, and `.claude/hooks/route-skills.sh` points a prompt at the one it
+asks for:
 
 - `file-issue` files tracked work on the Resume Builder board.
 - `start-work` begins an issue: worktree, draft PR, definition of done, merging.
 - `list-todos` reads what is open on the board.
 - `plan-issue` writes a short, verified plan into an issue body and moves its card to Planned.
+- `pr-review` reviews a PR inline and posts one review through the GitHub API.
 - `research-record` keeps a writeup with no code as a closed `research` issue.
 - `doc-sync` maps the doc surfaces a change has to keep true.
 
@@ -173,8 +178,8 @@ them. They target the webjs framework repo and its board, so use the skill above
 in their place. The one exception is a bug or gap in WebJs itself found while
 building here: file that on the framework's board with `webjs-file-issue` and a
 `dogfood:` title prefix. `use-railway` does not apply either: deployment here is
-pilots, through the `pilots` skill. Code review uses the `pr-review` skill. The `.agents/skills/webjs/` skill is different and
-stays in force, because it teaches how to build with the framework.
+pilots, through the `pilots` skill. The `.agents/skills/webjs/` skill is different
+and stays in force, because it teaches how to build with the framework.
 
 ## Type everything (all templates)
 

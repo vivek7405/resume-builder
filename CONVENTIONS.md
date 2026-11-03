@@ -5,6 +5,8 @@ The conventions for building a WebJs app live in the agent skill. **Read
 references under `.agents/skills/webjs/references/`, loaded on demand). This file
 only says where each rule lives, so no rule is stated twice.
 
+- **What Folio is for, and how it holds together**: `PRODUCT-PRINCIPLES.md` and
+  `ARCHITECTURE.md`.
 - **Build order** (study the showcase: a full-stack app's gallery under
   `app/features/` and `app/examples/todo`, the api template's
   `app/api/features/`; then `bun run gallery:clear`, data, UI, verify):
