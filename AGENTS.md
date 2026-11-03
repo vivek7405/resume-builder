@@ -156,6 +156,24 @@ bunx webjsdev ui view <name>  # inspect a primitive's exact signature
 bun run db:generate && bun run db:migrate
 ```
 
+## Project skills
+
+Workflow skills for this repo live in `.claude/skills/`, and
+`.claude/hooks/route-skills.sh` points a prompt at the one it asks for:
+
+- `file-issue` files tracked work on the Resume Builder board.
+- `start-work` begins an issue: worktree, draft PR, definition of done, merging.
+- `list-todos` reads what is open on the board.
+- `ready-for-dev` writes a verified plan into an issue body.
+- `research-record` keeps a writeup with no code as a closed `research` issue.
+- `doc-sync` maps the doc surfaces a change has to keep true.
+
+The `webjs-*` skills do not apply in this repo, even when a global hook names
+them. They target the webjs framework repo and its board, so use the skill above
+in their place. `use-railway` does not apply either: deployment here is pilots,
+through the `pilots` skill. The `.agents/skills/webjs/` skill is different and
+stays in force, because it teaches how to build with the framework.
+
 ## Type everything (all templates)
 
 Derive the type at every boundary from its source. Never reach for `any`, and
