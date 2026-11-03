@@ -25,12 +25,14 @@ bun --bun run dev                            # http://localhost:8080
 
 ## Verify
 
+[GitHub Actions](.github/workflows/ci.yml) runs every check on each pull request and each push to `main`, one job per check: conventions, health, types, the dependency audit, and the server, browser and e2e tests. `main` requires all of them, so a red check blocks the merge. Nothing has to pass locally before a push.
+
 ```sh
-bun run ci                   # check, doctor, typecheck, audit, server, browser and e2e tests
-bun run ci -- --only Tests   # one layer while iterating
+gh pr checks                            # the result for this branch's pull request
+bun run ci -- --only "Tests: server"    # one check while iterating, by its title in webjs.ci
 ```
 
-The e2e layer needs a Chromium: `bunx playwright install chromium`, then `CHROMIUM_PATH=$(node -e "console.log(require('playwright-core').chromium.executablePath())")` as the workflow does.
+The browser and e2e checks need a Chromium to run locally: `bunx playwright install chromium`, then `CHROMIUM_PATH=$(node -e "console.log(require('playwright-core').chromium.executablePath())")` as the workflow does.
 
 ## Deploy
 

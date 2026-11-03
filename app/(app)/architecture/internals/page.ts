@@ -269,8 +269,8 @@ export default function InternalsPage() {
     ${section({
       id: 'verify',
       heading: 'How it is verified',
-      lede: html`${C('bun run ci')} runs the step list in ${C('package.json')}, under ${C('webjs.ci')}. GitHub Actions runs the
-        same command, so the two cannot drift.`,
+      lede: html`GitHub Actions runs every check on each pull request and each push to ${C('main')}, one job per check. Each job
+        runs one entry of the step list in ${C('package.json')}, under ${C('webjs.ci')}, and a test holds the two together.`,
       body: html`
         ${cells([
           ['Setup and checks', html`${C('webjs db migrate')}, then ${C('webjs check')} for conventions, ${C('webjs doctor')}
@@ -282,7 +282,7 @@ export default function InternalsPage() {
           ['End-to-end tests', html`Chromium against a booted server: create, type, watch the preview and autosave, one-page
             print for each template, a phone width with no overflow, delete, and no script errors.`],
         ], 'md:grid-cols-2')}
-        ${sources(['package.json', '.github/workflows/ci.yml', 'test/resumes/', 'test/architecture/architecture.test.ts'])}
+        ${sources(['package.json', '.github/workflows/ci.yml', 'test/resumes/', 'test/architecture/architecture.test.ts', 'test/ci/ci-workflow.test.ts'])}
       `,
     })}
 
