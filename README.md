@@ -8,7 +8,7 @@ Built on [WebJs](https://webjs.dev): server-rendered pages, small web-component 
 
 - **Resumes list** with search and sort, each card a scaled thumbnail of the sheet.
 - **Editor** with one form per section (profile, experience, education, projects, skills, settings). Every form works with JavaScript off. With it on, each keystroke updates the live preview and the section autosaves.
-- **Three templates** (Classic, Modern, Minimal) rendered from one document, switchable at any time, with a six-colour accent.
+- **Three templates** (Classic, Modern, Minimal) rendered from one document, switchable at any time, with a seven-colour accent.
 - **Print view** on a real A4 sheet with print styles, so the browser's "Save as PDF" produces the document. **Export JSON** for a backup.
 - **Generate a sample resume**: one click inserts a complete, fictional resume so you can judge the output before typing a word.
 

@@ -68,6 +68,14 @@ test('settingsFromForm falls back to a known template and accent', () => {
   assert.deepEqual(bad, { title: '', template: 'classic', accent: ACCENTS[0].hex });
 });
 
+test('settingsFromForm keeps the Crimson accent', () => {
+  assert.equal(settingsFromForm(fd({ accent: '#a3243b' })).accent, '#a3243b');
+});
+
+test('every accent is a lowercase #rrggbb, the only form settingsFromForm can match', () => {
+  for (const a of ACCENTS) assert.match(a.hex, /^#[0-9a-f]{6}$/);
+});
+
 test('entryFromForm reads each section shape and validates months', () => {
   const exp = entryFromForm('experience', fd({ company: 'Lumen', role: 'Eng', start: '2021-03', end: 'bad', current: 'on', highlights: 'a\nb' }));
   assert.deepEqual(exp, { company: 'Lumen', role: 'Eng', location: '', start: '2021-03', end: '', current: true, highlights: 'a\nb' });

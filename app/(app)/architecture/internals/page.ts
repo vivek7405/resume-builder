@@ -223,7 +223,7 @@ export default function InternalsPage() {
       body: html`
         <p class=${PROSE}>${C('SAMPLE_RESUMES')} holds three complete fictional resumes, typed in TypeScript with no external
           calls. ${C('generateSample')} picks one with ${C('randomSample()')}, uses the requested template or the sample's
-          own, picks one of the six accents in ${C('ACCENTS')} and inserts an ordinary row. From there it is any other resume.
+          own, picks one of the seven accents in ${C('ACCENTS')} and inserts an ordinary row. From there it is any other resume.
           ${C('bun run db:seed')} inserts all three, and only when the table is empty.</p>
         <p class="${PROSE} mt-4">The sample's field is ${C('doc')} and the fragment is ${C('resume-sheet.ts')}, for a reason that has
           nothing to do with resumes. <a class=${LINK} href="#ships">What reaches the browser</a> explains it.</p>
