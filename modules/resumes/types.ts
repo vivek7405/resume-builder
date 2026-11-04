@@ -17,6 +17,7 @@ export const ACCENTS = [
   { id: 'rust', name: 'Rust', hex: '#b4531f' },
   { id: 'plum', name: 'Plum', hex: '#7a2e6b' },
   { id: 'moss', name: 'Moss', hex: '#4d6b2f' },
+  { id: 'crimson', name: 'Crimson', hex: '#a3243b' },
 ] as const;
 
 export interface Profile {
